@@ -170,7 +170,9 @@ async def load_database(
     global id_vr_status
     global debug
     path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+    database_path = "skyrim_vr_address_library" if skyrim else "fallout_vr_address_library"
     database = "database.csv" if skyrim else "fo4_database.csv"
+    path=os.path.join(path, database_path)
     try:
         async with aiofiles.open(os.path.join(path, database), mode="r") as infile:
             reader = aiocsv.AsyncDictReader(infile, restval="")

@@ -1,3 +1,6 @@
-[submodule "AddressLibraryDatabase"]
-	path = AddressLibraryDatabase
-	url = https://github.com/meh321/AddressLibraryDatabase.git
+[submodule "skyrim_vr_address_library"]
+	path = skyrim_vr_address_library
+	url = https://github.com/alandtse/skyrim_vr_address_library
+[submodule "fallout_vr_address_library"]
+	path = fallout_vr_address_library
+	url = https://github.com/alandtse/fallout_vr_address_library.git
