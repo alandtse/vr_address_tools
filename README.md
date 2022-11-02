@@ -33,7 +33,6 @@ This is a python tool that uses the various csv files to analyze c++ code. It is
 git clone https://github.com/alandtse/vr_address_tools
 cd vr_address_tools
 git submodule update --init --recursive # get address libraries
-git submodule update --recursive # update to latest
 ```
 2. Install [poetry](https://python-poetry.org/docs/#installation)
 3. Install python dependencies
