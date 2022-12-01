@@ -40,9 +40,30 @@ git submodule update --init --recursive # get address libraries
 poetry install
 ```
 
+##### Choosing the game
+By default, Skyrim is the default game. To change this, pass in the `-f` parameter.
+
+```shell
+(vr-address-tools-HCOra_zH-py3.9) PS E:\Documents\source\repos\vr_address_tools> python .\vr_address_tools.py ..\skyrim-drs -f analyze
+Finished scanning 17 files. rel_ids: 0 offsets: 0 results: 10
+\src/DRS.h:65   ID: 35556       FLAT: 0x14366077c                       WARNING: VR Address undefined.
+\src/SkyrimUpscaler.cpp:71      ID: 513786      FLAT: 0x143547c48                       WARNING: VR Address undefined.
+\src/SkyrimUpscaler.cpp:80      ID: 517032      FLAT: 0x1468a04b8                       WARNING: VR Address undefined.
+\src/SkyrimUpscaler.cpp:81      ID: 517032      FLAT: 0x1468a04b8                       WARNING: VR Address undefined.
+\src/SkyrimUpscaler.h:24        ID: 527731      FLAT: 0x1469ddb40                       WARNING: VR Address undefined.
+\src/UpscalerHooks.cpp:388      ID: 75595       FLAT: 0x146a005e0                       WARNING: VR Address undefined.
+\src/UpscalerHooks.cpp:397      ID: 75460       FLAT: 0x140b98f60                       WARNING: VR Address undefined.
+\src/UpscalerHooks.cpp:399      ID: 75709       FLAT: 0x1408c4ba4                       WARNING: VR Address undefined.
+\src/UpscalerHooks.cpp:400      ID: 75711       FLAT: 0x14691d8f4                       WARNING: VR Address undefined.
+\src/UpscalerHooks.cpp:408      ID: 79947       FLAT: 0x143669014                       WARNING: VR Address undefined.
+Found 10 items
+```
+
+
+
 ##### analyze
 
-Analyze code to determine if uses of rel::id have been defined in `database.csv`. This allows the mod to be compiled with rel::id's without further changes. Rel::ids using offsets may require further code changes if the VR function has changed.
+Analyze code to determine if uses of rel::id have been defined in `database.csv`. This allows the mod to be compiled with rel::id's without further changes. Rel::ids using offsets may require further code changes if the VR function has changed. `RELOCATION_ID`, `REL::RELOCATION_ID`, `REL::ID` are supported.
 
 Output will be a tab separated with warnings and potential SSE or VR addresses to check:
 ```shell
@@ -57,12 +78,22 @@ include/RE/B/BSPointerHandle.h:220      REL::ID(12204), 1234    SSE: 0x1401329d0
 include/RE/B/BSPointerHandleManager.h:30        REL::ID(514478) SSE: 0x141ec47c0                        WARNING: VR Address undefined.
 ```
 
-**Warning: rel::id with offsets may require change if the underlying function has been changed in VR.**
+**Warning: rel::id with offsets may require change if the underlying function has been changed in VR.** This is not necessary if the confidence or status is 4.
 
 ```cpp
 REL::Relocation<std::uintptr_t> target{ REL::ID(41659), 0x526 };
 ```
 In this example, even if 41659 exists in database.csv, the offset to 0x526 may not be the same in VR and will need to be manually updated.
+
+The `-d` parameter will output a csv format that can be added directly to database.csv. In this example, all ids found were already in the database.
+
+```shell
+PS E:\Documents\source\repos\vr_address_tools> python .\vr_address_tools.py ..\skyrim-drs analyze -d
+Database Load Warning: 24647 mismatch 0x14037f050       0x14037e190
+Finished scanning 17 files. rel_ids: 0 offsets: 0 results: 10
+
+Found 0 items
+```
 
 ##### generate
 
