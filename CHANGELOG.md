@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.1 (2023-03-18)
+### Fix
+* Fix preprocessor defines ([`f0c4bf0`](https://github.com/alandtse/vr_address_tools/commit/f0c4bf0a1aee257cf96c329baadfc64d343b0e08))
+
+### Documentation
+* Update readme ([`f54fb0c`](https://github.com/alandtse/vr_address_tools/commit/f54fb0c1e7c9a207368477c5b6af431e70a96984))
+
 ## v1.0.0 (2022-12-01)
 ### Feature
 * Break out vr_address_tools to own versioning ([`5c9923b`](https://github.com/alandtse/vr_address_tools/commit/5c9923b8794617102c4d6a0cf441f5cd9c411e0e))

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vr_address_tools"
-version = "1.0.0"
+version = "1.0.1"
 description = "Tools for converting a Skyrim SSE/Fallout 4 skse/F4SE mod to Skyrim/Fallout VR"
 authors = ["Alan D. Tse <alandtse@gmail.com>"]
 license = "MIT"
