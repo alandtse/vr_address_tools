@@ -3,7 +3,6 @@ import aiofiles
 import aiocsv
 import argparse
 import asyncio
-import csv
 import fileinput
 import io
 import mmap
