@@ -113,8 +113,8 @@ async def preProcessData(data: str, defines=None) -> str:
 
     defines = defines or {}
     global cpp
-    for key, value in defines:
-        cpp.define(f"{key}={value}")
+    for key, value in defines.items():
+        cpp.define(f"{key} {value}")
     cpp.parse(data)
     with io.StringIO() as buffer:
         cpp.write(buffer)
