@@ -179,9 +179,11 @@ async def load_database(
     global id_vr_status
     global debug
     path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-    database_path = "skyrim_vr_address_library" if skyrim else "fallout_vr_address_library"
+    database_path = (
+        "skyrim_vr_address_library" if skyrim else "fallout_vr_address_library"
+    )
     database = "database.csv" if skyrim else "fo4_database.csv"
-    path=os.path.join(path, database_path)
+    path = os.path.join(path, database_path)
     try:
         async with aiofiles.open(os.path.join(path, database), mode="r") as infile:
             reader = aiocsv.AsyncDictReader(infile, restval="")
@@ -255,7 +257,6 @@ async def load_database(
     except FileNotFoundError:
         print(f"{ida_compare} not found")
     if skyrim:
-
         try:
             async with aiofiles.open(os.path.join(path, se_ae), mode="r") as infile:
                 reader = aiocsv.AsyncDictReader(infile)
@@ -288,7 +289,9 @@ async def load_database(
             print(f"{ae_names} not found")
 
         try:
-            async with aiofiles.open(os.path.join(path, se_ae_offsets), mode="r") as infile:
+            async with aiofiles.open(
+                os.path.join(path, se_ae_offsets), mode="r"
+            ) as infile:
                 reader = aiocsv.AsyncDictReader(infile, delimiter=",")
                 # sseid,sse_addr,ae_addr,aeid,comments
                 async for row in reader:
@@ -366,7 +369,14 @@ async def scan_code(
         for filename in filenames:
             if filename not in a_exclude and filename.endswith(ALL_TYPES):
                 file_count += 1
-                await scan_file(a_directory, results, defined_rel_ids, defined_vr_offsets, dirpath, filename)
+                await scan_file(
+                    a_directory,
+                    results,
+                    defined_rel_ids,
+                    defined_vr_offsets,
+                    dirpath,
+                    filename,
+                )
     print(
         f"Finished scanning {file_count:n} files. rel_ids: {len(defined_rel_ids)} offsets: {len(defined_vr_offsets)} results: {len(results)}"
     )
@@ -376,23 +386,24 @@ async def scan_code(
         "results": results,
     }
 
-async def scan_file(a_directory, results, defined_rel_ids, defined_vr_offsets, dirpath, filename):
+
+async def scan_file(
+    a_directory, results, defined_rel_ids, defined_vr_offsets, dirpath, filename
+):
     await find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filename)
     if not filename.lower().startswith("offset"):
-                    # offset files historically (particualrly in commonlib) were treated special because they were a source of truth for matched addresses
-                    # however, newer libraries (po3/ng) use macros that already have info
+        # offset files historically (particularly in commonlib) were treated special because they were a source of truth for matched addresses
+        # however, newer libraries (po3/ng) use macros that already have info
         await search_for_ids(
-                        a_directory,
-                        results,
-                        defined_rel_ids,
-                        defined_vr_offsets,
-                        dirpath,
-                        filename,
-                    )
+            a_directory,
+            results,
+            defined_rel_ids,
+            defined_vr_offsets,
+            dirpath,
+            filename,
+        )
     else:
-        await parse_offsets(
-                        defined_rel_ids, defined_vr_offsets, dirpath, filename
-                    )
+        await parse_offsets(defined_rel_ids, defined_vr_offsets, dirpath, filename)
 
 
 async def search_for_ids(
@@ -582,7 +593,9 @@ async def regex_parse(defined_rel_ids, defined_vr_offsets, dirpath, filename):
             print(f"Unable to read {dirpath}/{filename}: ", ex)
 
 
-async def cpp_header_parse(defined_rel_ids, defined_vr_offsets, dirpath, filename) -> bool:
+async def cpp_header_parse(
+    defined_rel_ids, defined_vr_offsets, dirpath, filename
+) -> bool:
     result = False
     try:
         async with aiofiles.open(f"{dirpath}/{filename}", "r+") as f:
@@ -1162,4 +1175,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
