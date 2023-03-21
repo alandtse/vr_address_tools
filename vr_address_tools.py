@@ -140,7 +140,7 @@ def add_hex_strings(input1: str, input2: str = "0") -> str:
     Returns:
         str: Hex string sum.
     """
-    if input1 is None:
+    if input1 is None or input1 == "":
         return ""
     if isinstance(input1, int):
         input1 = str(input1)
