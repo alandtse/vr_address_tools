@@ -200,25 +200,28 @@ async def load_database(
     except FileNotFoundError:
         print(f"database.csv not found")
 
-    if skyrim:
-        try:
-            async with aiofiles.open(os.path.join(path, addresslib), mode="r") as infile:
-                reader = aiocsv.AsyncDictReader(infile)
-                async for row in reader:
-                    id = int(row["id"])
-                    sse = add_hex_strings(row["sse"])
-                    vr = add_hex_strings(row["vr"])
-                    if id_vr_status.get(id):
-                        if debug:
-                            print(
-                                f"Database Load Warning: {id} already loaded skipping load from {addresslib}"
-                            )
-                    else:
-                        id_sse[id] = sse
-                        id_vr[id] = vr
-                        loaded += 1
-        except FileNotFoundError:
-            print(f"{addresslib} not found")
+    try:
+        async with aiofiles.open(os.path.join(path, addresslib), mode="r") as infile:
+            reader = aiocsv.AsyncDictReader(infile)
+            async for row in reader:
+                id = int(row["id"])
+                sse = add_hex_strings(row.get("sse" if skyrim else "fo4_addr"))
+                vr = add_hex_strings(row.get("vr" if skyrim else "vr_addr"))
+                if id_vr_status.get(id):
+                    if debug:
+                        print(
+                            f"Database Load Warning: {id} already loaded skipping load from {addresslib}"
+                        )
+                elif vr:
+                    id_sse[id] = sse
+                    id_vr[id] = vr
+                    id_vr_status[id] = {
+                        "sse": sse,
+                        "status": CONFIDENCE["SUGGESTED"],
+                    }
+                    loaded += 1
+    except FileNotFoundError:
+        print(f"{addresslib} not found")
 
     try:
         async with aiofiles.open(os.path.join(path, offsets), mode="r") as infile:
