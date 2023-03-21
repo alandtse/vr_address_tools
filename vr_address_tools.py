@@ -744,7 +744,7 @@ def match_results(
         updateDatabase = False
         suggested_vr = ""
         if match.get("id_with_offset"):
-            id = int(match.get("id_with_offsetd"))
+            id = int(match.get("id_with_offset"))
             offset = match.get("offset", 0)
         elif match.get("sse"):
             id = int(match.get("sse"))
