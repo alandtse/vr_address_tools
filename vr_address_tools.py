@@ -763,7 +763,10 @@ def match_results(
             offset = 0
         else:
             continue
-        if id_vr.get(id) is None:
+        if (
+            id_vr.get(id) is None
+            or int(id_vr_status.get(id, {}).get("status", 0)) == CONFIDENCE["SUGGESTED"]
+        ):
             updateDatabase = True
         status = int(id_vr_status.get(id, {}).get("status", 0))
         if id_vr.get(id) and status >= min_confidence:
