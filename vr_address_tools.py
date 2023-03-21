@@ -60,6 +60,7 @@ REGEX_PARSE_DICT = {
     REL_ID: OFFSET_RELID_PATTERN,
     REL_OFFSET: OFFSET_OFFSET_PATTERN,
 }
+FUNCTION_REGEX = r"(?:class (?P<class_decl>\w+)[&\w\s;:<>{=[\]*]*?)?(?P<return_type>[\w<>:*]+)\s+(?:\w+::)?(?P<func_name>[\w]+)\s*\((?P<args>[^)]*),?\s*\)[\w\s]*{(?:[\w\s=]*decltype\(&(?P<class>\w+)::(?P=func_name)+(?:<.*>)?\))?[&\w\s;:<>{=*]*REL(?:[\w:]*ID)\((?:(?P<id>\d*)|(?P<sseid>\d*),\s*(?P<aeid>\d*))\) };"
 GENERIC_FOO_REGEX = r"(?P<return_type>[\w<>:*&]+)\s+(?:\w+::)?(?P<func_name>[\w]+)\s*\((?P<args>[^)]*)?\s*\)[\w\s]*{[&\w\s;:<>{=*/+-.]*_generic_foo<(?:(?P<id>\d*)),\s+(?P=return_type)(?:,\s*)?(?:(?P<class>\w+)\*)?.*>\(.*\);"
 ARGS_REGEX = r"(?P<arg_pair>(?:const )?(?P<arg_type>[\w*&:_]+)\s+(?P<arg>[\w_]*)),?"
 FUNCTION_REGEX_PARSE_DICT = {
