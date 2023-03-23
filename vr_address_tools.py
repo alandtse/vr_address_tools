@@ -483,7 +483,7 @@ async def search_for_ids(
                             print(
                                 f"Found ifndef {filename}::{name} with id: {id} offset: {offset}"
                             )
-        except UnicodeDecodeError as ex:
+        except (UnicodeDecodeError, ValueError) as ex:
             print(f"Unable to read {dirpath}/{filename}: ", ex)
 
 
@@ -529,7 +529,7 @@ async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filenam
                         ae_name[aeid] = f"{return_type} {fullName}({args})"
                         if debug:
                             print(f"Found AE_ID {aeid}: {ae_name[aeid]}")
-        except UnicodeDecodeError as ex:
+        except (UnicodeDecodeError, ValueError) as ex:
             print(f"Unable to read {dirpath}/{filename}: ", ex)
 
 
