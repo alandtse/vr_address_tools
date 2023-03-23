@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.1.1 (2023-03-23)
+### Fix
+* Handle parsing of blank files ([`c002b56`](https://github.com/alandtse/vr_address_tools/commit/c002b56b2ec10ec57c3ccd8133d92e98f15fe724))
+
 ## v1.1.0 (2023-03-21)
 ### Feature
 * Support addresslib matching for fo4 ([`94ef642`](https://github.com/alandtse/vr_address_tools/commit/94ef64284f6fae595cf5e8f48cc94d4ff3184e14))
