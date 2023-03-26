@@ -52,6 +52,17 @@ def merge_fo4():
             value['id'] = key
             writer.writerow(value)
 
+def merge_fo4_vr():
+    # read address id fo4 offsets
+    df1 = pd.read_table("offsets-1-10-163-0.csv", sep=",")
+    # read attempted fo4_vr csv
+    df2 = pd.read_table('fo4_vr.csv', sep=',', quoting=csv.QUOTE_ALL)
+    df1['fo4_addr'] = df1['fo4_addr'].apply(lambda x: hex(int(x, 16) + BASE))
+    df2['fo4_addr'] = df2['fo4_addr'].apply(lambda x: hex(int(x, 16) + BASE))
+    output1 = pd.merge(df1, df2, left_on="fo4_addr", right_on="fo4_addr", how="left")
+    output1['vr_addr'] = output1['vr_addr'].apply(lambda x: hex(int(x, 16) + BASE) if isinstance(x, str) else "")
+    output1.to_csv("addrlib.csv", index=False)
+
 
 def merge_with_override(
     base: pd.DataFrame, new: pd.DataFrame, merge_index: str
@@ -75,4 +86,4 @@ def merge_with_override(
             base.rename(columns={col: col[:-2]}, inplace=True)
     return base
 
-merge_fo4()
+merge_fo4_vr()

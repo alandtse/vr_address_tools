@@ -27,6 +27,12 @@ RELID_PATTERN = r"(\w+){ REL::ID\(([0-9]+)\),*\s*([a-fx0-9])*\s+};"
 RELOCATION_ID_PATTERN = r"(?P<prefix>[\w_]+)?(?:[{>(]* ?)?(?:rel::)?REL(?:OCATION)?_?ID\((?P<sse>[0-9]+),+\s*(?P<ae>[0-9]*)\)(?:,\s*OFFSET(?:_3)?\((?P<sse_offset>0x[a-f0-9]+)(?P<ae_offset>,\s*0x[a-f0-9]+)?(?P<vr_offset>,\s*0x[a-f0-9]+)?\))?(?:\s*};)?"
 # commonlibsse-ng patterns constexpr REL::VariantID NiRTTI_BGSAddonNodeSoundHandleExtra(514633, 400793, 0x2f8a838);
 VARIANT_ID_PATTERN = r"REL::VariantID\s+(?P<prefix>\w+)\((?P<sse>[0-9]+),+\s*(?P<ae>[0-9]*),+\s*0x(?P<vr_offset>[a-f0-9]*)\);"
+# Maxsu
+# NodeArray& init_withNode_withname(NodeArray& array, const char* name, CombatBehaviorTreeNode* node)
+# {
+# 	return _generic_foo<46261, NodeArray&, NodeArray&, const char*, CombatBehaviorTreeNode*>(array, name, node);
+# }
+GENERIC_FOO_ID = r"_generic_foo<(?P<sse>[0-9]+),"
 ## These are regexes for parsing offset files that typically can help define relationships (older commonlibvr); po3 and ng now allow for definition through macro use
 # commonlibsse-ng patterns
 # namespace BSSoundHandle
@@ -43,7 +49,7 @@ OFFSET_OFFSET_PATTERN = (
     r"(?:inline|constexpr) REL::Offset\s+(\w+)\s*(?:\(|\{)\s*([a-fx0-9]+)"
 )
 IFNDEF_PATTERN = r"([\w():]*)\s*{\s*#ifndef SKYRIMVR\s*([^{]*){\s*rel::id\(([0-9]*)\)\s}.*\s*#else\s*\2{.*(?:rel::offset)*(0x[0-9a-f]*)"
-RELID_MATCH_ARRAY = [PATTERN_GROUPS, RELOCATION_ID_PATTERN]
+RELID_MATCH_ARRAY = [PATTERN_GROUPS, RELOCATION_ID_PATTERN, GENERIC_FOO_ID]
 REL_ID_VTABLE = "rel::id vtable"
 REL_OFFSET_VTABLE = "rel::offset vtable"
 REL_ID = "rel::id"
@@ -54,9 +60,13 @@ REGEX_PARSE_DICT = {
     REL_ID: OFFSET_RELID_PATTERN,
     REL_OFFSET: OFFSET_OFFSET_PATTERN,
 }
-FUNCTION_REGEX = r"(?:class (?P<class_decl>\w+)[&\w\s;:<>{=[\]*]*?)?(?P<return_type>[\w<>:*]+)\s+(?:\w+::)?(?P<func_name>[\w]+)\s*\((?P<args>[^)]*),?\s*\)[\w\s]*{(?:[\w\s=]*decltype\(&(?P<class>\w+)::(?P=func_name)+\))?[&\w\s;:<>{=*]*REL(?:[\w:]*ID)\((?:(?P<id>\d*)|(?P<sseid>\d*),\s*(?P<aeid>\d*))\) };"
+FUNCTION_REGEX = r"(?:class (?P<class_decl>\w+)[&\w\s;:<>{=[\]*]*?)?(?P<return_type>[\w<>:*]+)\s+(?:\w+::)?(?P<func_name>[\w]+)\s*\((?P<args>[^)]*),?\s*\)[\w\s]*{(?:[\w\s=]*decltype\(&(?P<class>\w+)::(?P=func_name)+(?:<.*>)?\))?[&\w\s;:<>{=*]*REL(?:[\w:]*ID)\((?:(?P<id>\d*)|(?P<sseid>\d*),\s*(?P<aeid>\d*))\) };"
+GENERIC_FOO_REGEX = r"(?P<return_type>[\w<>:*&]+)\s+(?:\w+::)?(?P<func_name>[\w]+)\s*\((?P<args>[^)]*)?\s*\)[\w\s]*{[&\w\s;:<>{=*/+-.]*_generic_foo<(?:(?P<id>\d*)),\s+(?P=return_type)(?:,\s*)?(?:(?P<class>\w+)\*)?.*>\(.*\);"
 ARGS_REGEX = r"(?P<arg_pair>(?:const )?(?P<arg_type>[\w*&:_]+)\s+(?P<arg>[\w_]*)),?"
-
+FUNCTION_REGEX_PARSE_DICT = {
+    "decltype": FUNCTION_REGEX,
+    "generic_foo": GENERIC_FOO_REGEX,
+}
 REPLACEMENT = """
 #ifndef SKYRIMVR
 	{}  // SSE {}
@@ -130,7 +140,7 @@ def add_hex_strings(input1: str, input2: str = "0") -> str:
     Returns:
         str: Hex string sum.
     """
-    if input1 is None:
+    if input1 is None or input1 == "":
         return ""
     if isinstance(input1, int):
         input1 = str(input1)
@@ -169,9 +179,11 @@ async def load_database(
     global id_vr_status
     global debug
     path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-    database_path = "skyrim_vr_address_library" if skyrim else "fallout_vr_address_library"
+    database_path = (
+        "skyrim_vr_address_library" if skyrim else "fallout_vr_address_library"
+    )
     database = "database.csv" if skyrim else "fo4_database.csv"
-    path=os.path.join(path, database_path)
+    path = os.path.join(path, database_path)
     try:
         async with aiofiles.open(os.path.join(path, database), mode="r") as infile:
             reader = aiocsv.AsyncDictReader(infile, restval="")
@@ -190,25 +202,28 @@ async def load_database(
     except FileNotFoundError:
         print(f"database.csv not found")
 
-    if skyrim:
-        try:
-            async with aiofiles.open(os.path.join(path, addresslib), mode="r") as infile:
-                reader = aiocsv.AsyncDictReader(infile)
-                async for row in reader:
-                    id = int(row["id"])
-                    sse = add_hex_strings(row["sse"])
-                    vr = add_hex_strings(row["vr"])
-                    if id_vr_status.get(id):
-                        if debug:
-                            print(
-                                f"Database Load Warning: {id} already loaded skipping load from {addresslib}"
-                            )
-                    else:
-                        id_sse[id] = sse
-                        id_vr[id] = vr
-                        loaded += 1
-        except FileNotFoundError:
-            print(f"{addresslib} not found")
+    try:
+        async with aiofiles.open(os.path.join(path, addresslib), mode="r") as infile:
+            reader = aiocsv.AsyncDictReader(infile)
+            async for row in reader:
+                id = int(row["id"])
+                sse = add_hex_strings(row.get("sse" if skyrim else "fo4_addr"))
+                vr = add_hex_strings(row.get("vr" if skyrim else "vr_addr"))
+                if id_vr_status.get(id):
+                    if debug:
+                        print(
+                            f"Database Load Warning: {id} already loaded skipping load from {addresslib}"
+                        )
+                elif vr:
+                    id_sse[id] = sse
+                    id_vr[id] = vr
+                    id_vr_status[id] = {
+                        "sse": sse,
+                        "status": CONFIDENCE["SUGGESTED"],
+                    }
+                    loaded += 1
+    except FileNotFoundError:
+        print(f"{addresslib} not found")
 
     try:
         async with aiofiles.open(os.path.join(path, offsets), mode="r") as infile:
@@ -242,7 +257,6 @@ async def load_database(
     except FileNotFoundError:
         print(f"{ida_compare} not found")
     if skyrim:
-
         try:
             async with aiofiles.open(os.path.join(path, se_ae), mode="r") as infile:
                 reader = aiocsv.AsyncDictReader(infile)
@@ -275,7 +289,9 @@ async def load_database(
             print(f"{ae_names} not found")
 
         try:
-            async with aiofiles.open(os.path.join(path, se_ae_offsets), mode="r") as infile:
+            async with aiofiles.open(
+                os.path.join(path, se_ae_offsets), mode="r"
+            ) as infile:
                 reader = aiocsv.AsyncDictReader(infile, delimiter=",")
                 # sseid,sse_addr,ae_addr,aeid,comments
                 async for row in reader:
@@ -353,7 +369,14 @@ async def scan_code(
         for filename in filenames:
             if filename not in a_exclude and filename.endswith(ALL_TYPES):
                 file_count += 1
-                await scan_file(a_directory, results, defined_rel_ids, defined_vr_offsets, dirpath, filename)
+                await scan_file(
+                    a_directory,
+                    results,
+                    defined_rel_ids,
+                    defined_vr_offsets,
+                    dirpath,
+                    filename,
+                )
     print(
         f"Finished scanning {file_count:n} files. rel_ids: {len(defined_rel_ids)} offsets: {len(defined_vr_offsets)} results: {len(results)}"
     )
@@ -363,23 +386,24 @@ async def scan_code(
         "results": results,
     }
 
-async def scan_file(a_directory, results, defined_rel_ids, defined_vr_offsets, dirpath, filename):
+
+async def scan_file(
+    a_directory, results, defined_rel_ids, defined_vr_offsets, dirpath, filename
+):
     await find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filename)
     if not filename.lower().startswith("offset"):
-                    # offset files historically (particualrly in commonlib) were treated special because they were a source of truth for matched addresses
-                    # however, newer libraries (po3/ng) use macros that already have info
+        # offset files historically (particularly in commonlib) were treated special because they were a source of truth for matched addresses
+        # however, newer libraries (po3/ng) use macros that already have info
         await search_for_ids(
-                        a_directory,
-                        results,
-                        defined_rel_ids,
-                        defined_vr_offsets,
-                        dirpath,
-                        filename,
-                    )
+            a_directory,
+            results,
+            defined_rel_ids,
+            defined_vr_offsets,
+            dirpath,
+            filename,
+        )
     else:
-        await parse_offsets(
-                        defined_rel_ids, defined_vr_offsets, dirpath, filename
-                    )
+        await parse_offsets(defined_rel_ids, defined_vr_offsets, dirpath, filename)
 
 
 async def search_for_ids(
@@ -459,7 +483,7 @@ async def search_for_ids(
                             print(
                                 f"Found ifndef {filename}::{name} with id: {id} offset: {offset}"
                             )
-        except UnicodeDecodeError as ex:
+        except (UnicodeDecodeError, ValueError) as ex:
             print(f"Unable to read {dirpath}/{filename}: ", ex)
 
 
@@ -469,40 +493,43 @@ async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filenam
     async with aiofiles.open(f"{dirpath}/{filename}", "r+") as f:
         try:
             data = mmap.mmap(f.fileno(), 0).read().decode("utf-8")
-            search = re.finditer(FUNCTION_REGEX, await preProcessData(data), re.I)
-            namespace = ""
-            for m in search:
-                result = m.groupdict()
-                return_type = result.get("return_type")
-                funcName = result.get("func_name")
-                if result.get("class_decl") and namespace != result.get("class_decl"):
-                    namespace = result.get("class_decl")
-                if result.get("class") and namespace != result.get("class"):
-                    className = (
-                        f"{namespace}::{result.get('class')}"
-                        if namespace
-                        else result.get("class")
-                    )
-                elif result.get("class"):
-                    className = result.get("class")
-                else:
-                    className = ""
-                fullName = f"{className}::{funcName}" if className else funcName
-                args = " ".join(result.get("args").split())
-                if result.get("id"):
-                    id = int(result.get("id"))
-                elif result.get("sseid"):
-                    id = int(result.get("sseid"))
-                if id:
-                    id_name[id] = f"{return_type} {fullName}({args})"
-                    if debug:
-                        print(f"Found ID {id}: {id_name[id]}")
-                if result.get("aeid"):
-                    aeid = int(result.get("aeid"))
-                    ae_name[aeid] = f"{return_type} {fullName}({args})"
-                    if debug:
-                        print(f"Found AE_ID {aeid}: {ae_name[aeid]}")
-        except UnicodeDecodeError as ex:
+            for type_key, regex in FUNCTION_REGEX_PARSE_DICT.items():
+                search = re.finditer(regex, await preProcessData(data), re.I)
+                namespace = ""
+                for m in search:
+                    result = m.groupdict()
+                    return_type = result.get("return_type")
+                    funcName = result.get("func_name")
+                    if result.get("class_decl") and namespace != result.get(
+                        "class_decl"
+                    ):
+                        namespace = result.get("class_decl")
+                    if result.get("class") and namespace != result.get("class"):
+                        className = (
+                            f"{namespace}::{result.get('class')}"
+                            if namespace
+                            else result.get("class")
+                        )
+                    elif result.get("class"):
+                        className = result.get("class")
+                    else:
+                        className = ""
+                    fullName = f"{className}::{funcName}" if className else funcName
+                    args = " ".join(result.get("args").split())
+                    if result.get("id"):
+                        id = int(result.get("id"))
+                    elif result.get("sseid"):
+                        id = int(result.get("sseid"))
+                    if id:
+                        id_name[id] = f"{return_type} {fullName}({args})"
+                        if debug:
+                            print(f"Found ID {id}: {id_name[id]}")
+                    if result.get("aeid"):
+                        aeid = int(result.get("aeid"))
+                        ae_name[aeid] = f"{return_type} {fullName}({args})"
+                        if debug:
+                            print(f"Found AE_ID {aeid}: {ae_name[aeid]}")
+        except (UnicodeDecodeError, ValueError) as ex:
             print(f"Unable to read {dirpath}/{filename}: ", ex)
 
 
@@ -566,7 +593,9 @@ async def regex_parse(defined_rel_ids, defined_vr_offsets, dirpath, filename):
             print(f"Unable to read {dirpath}/{filename}: ", ex)
 
 
-async def cpp_header_parse(defined_rel_ids, defined_vr_offsets, dirpath, filename) -> bool:
+async def cpp_header_parse(
+    defined_rel_ids, defined_vr_offsets, dirpath, filename
+) -> bool:
     result = False
     try:
         async with aiofiles.open(f"{dirpath}/{filename}", "r+") as f:
@@ -738,7 +767,7 @@ def match_results(
         updateDatabase = False
         suggested_vr = ""
         if match.get("id_with_offset"):
-            id = int(match.get("id_with_offsetd"))
+            id = int(match.get("id_with_offset"))
             offset = match.get("offset", 0)
         elif match.get("sse"):
             id = int(match.get("sse"))
@@ -757,7 +786,10 @@ def match_results(
             offset = 0
         else:
             continue
-        if id_vr.get(id) is None:
+        if (
+            id_vr.get(id) is None
+            or int(id_vr_status.get(id, {}).get("status", 0)) == CONFIDENCE["SUGGESTED"]
+        ):
             updateDatabase = True
         status = int(id_vr_status.get(id, {}).get("status", 0))
         if id_vr.get(id) and status >= min_confidence:
@@ -1150,4 +1182,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
