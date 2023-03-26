@@ -571,7 +571,14 @@ async def cpp_header_parse(defined_rel_ids, defined_vr_offsets, dirpath, filenam
     try:
         async with aiofiles.open(f"{dirpath}/{filename}", "r+") as f:
             data = mmap.mmap(f.fileno(), 0).read().decode("utf-8")
-            header = CppHeaderParser.CppHeader(data, argType="string")
+            processed_data = await preProcessData(data)
+            # Next line solves bug https://github.com/robotpy/robotpy-cppheaderparser/issues/83
+            processed_data = re.sub("\n#line .*", "\n", processed_data)
+            header = CppHeaderParser.CppHeader(
+                processed_data,
+                argType="string",
+                preprocessed=True,
+            )
     except CppHeaderParser.CppHeaderParser.CppParseError as ex:
         print(f"Unable to cppheaderparse {dirpath}/{filename}: ", ex)
         return result
