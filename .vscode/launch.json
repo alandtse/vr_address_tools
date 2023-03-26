@@ -42,7 +42,22 @@
       "console": "integratedTerminal",
       "args": ["../CommonLibF4", "-f", "generate", "--min", "1", "-d"]
     },
-
+    {
+      "name": "Python: Extract Structs",
+      "type": "python",
+      "request": "launch",
+      "program": "extractStruct.py",
+      "console": "integratedTerminal",
+      "args": ["../CommonLibVR"]
+    },
+    {
+      "name": "Python: Extract Structs Player Character",
+      "type": "python",
+      "request": "launch",
+      "program": "extractStruct.py",
+      "console": "integratedTerminal",
+      "args": ["../CommonLibVR/include/RE/P/PlayerCharacter.h"]
+    },
 
   ]
 }
