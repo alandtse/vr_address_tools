@@ -12,6 +12,7 @@ import pcpp
 import CppHeaderParser
 from typing import List
 import locale
+import orjson
 
 locale.setlocale(locale.LC_ALL, "")  # Use '' for auto, or force e.g. to 'en_US.UTF-8'
 
@@ -80,10 +81,15 @@ id_vr = {}
 sse_vr = {}
 sse_ae = {}
 ae_name = {}
+offset_name = {}
 id_vr_status = {}
 debug = False
 args = {}
 SKYRIM_BASE = "0x140000000"
+PDB_BASE = {
+    # "skyrim": {1: "0x140001000", 2: "0x141580290", 3: "0x141DA5570"},
+    "fallout": {1: "0x140001000", 2: "0x142c0c000", 3: "0x142C17000"},
+}
 CONFIDENCE = {
     "UNKNOWN": 0,  # ID is unknown
     "SUGGESTED": 1,  # At least one automated database matched
@@ -158,6 +164,7 @@ async def load_database(
     ae_names="AddressLibraryDatabase/skyrimae.rename",
     se_ae_offsets="se_ae_offsets.csv",
     skyrim=True,
+    pdb_json="pdb.json",
 ) -> int:
     """Load databases.
 
@@ -170,6 +177,7 @@ async def load_database(
         ae_names (str, optional): Name of ae ID to name mapping (e.g., 11 MonitorAPO::Func9_*). Defaults to "AddressLibraryDatabase/skyrimae.rename".
         se_ae_offsets (str, optional): Name of merged sse/ae id/address map. Based off meh's mapping offsets, https://www.nexusmods.com/skyrimspecialedition/mods/32444?tab=files, and AddressLibraryDatabase comments. Created using merge.py. Defaults to "se_ae_offsets.csv".
         skyrim (bool,optional): Whether analyzing skyrim or fallout4. Defaults to True
+        pdb_json (str, optional): Name of PDB converted to yaml to parse. Defaults to pdb.yaml. This should be the PublicsStream.
     Returns:
         int: Number of successfully loaded csv files. 0 means none were loaded.
     """
@@ -256,6 +264,22 @@ async def load_database(
                 loaded += 1
     except FileNotFoundError:
         print(f"{ida_compare} not found")
+    try:
+        with open(os.path.join(path, pdb_json), mode="r") as infile:
+            pdb = orjson.loads(infile.read())
+            for record in pdb["PublicsStream"]["Records"]:
+                name = record["PublicSym32"]["Name"]
+                offset = record["PublicSym32"]["Offset"]
+                segment = record["PublicSym32"]["Segment"]
+                found_address = PDB_BASE.get("skyrim" if skyrim else "fallout", {}).get(
+                    segment
+                )
+                if found_address:
+                    offset_name[add_hex_strings(offset, found_address)] = name
+            if debug:
+                print(f"{pdb_json} loaded with {len(offset_name)} entries")
+    except FileNotFoundError:
+        print(f"{pdb_json} not found")
     if skyrim:
         try:
             async with aiofiles.open(os.path.join(path, se_ae), mode="r") as infile:
@@ -975,6 +999,12 @@ async def write_csv(
                             if not id_name.get(id)
                             else id_name.get(id)
                         )
+                        # check pdbs
+                        pdb_name = offset_name.get(sse_addr)
+                        if pdb_name:
+                            if name and name != pdb_name:
+                                print(f"{id}: Replacing {name} with {pdb_name}")
+                            name = pdb_name
                         # add cpp parser names from offsets file
                         if not name and entry.get("func"):
                             name = (

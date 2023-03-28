@@ -13,6 +13,7 @@ python-semantic-release = ">=7.32.1"
 pcpp = "^1.30"
 aiofiles = "^22.1.0"
 aiocsv = "^1.2.3"
+orjson = "^3.8.8"
 
 [tool.poetry.dev-dependencies]
 black = ">=21.9b0"
