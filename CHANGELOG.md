@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.0 (2023-03-26)
+### Feature
+* Add extract Struct script ([`f1486a7`](https://github.com/alandtse/vr_address_tools/commit/f1486a73149aacf44a8b2b346802ca4b7b69ce42))
+
+### Fix
+* Fix cppheaderparser #define bug ([`d71fb19`](https://github.com/alandtse/vr_address_tools/commit/d71fb19915fe70df7a6311a039764fc2c59dcccf))
+
 ## v1.1.1 (2023-03-23)
 ### Fix
 * Handle parsing of blank files ([`c002b56`](https://github.com/alandtse/vr_address_tools/commit/c002b56b2ec10ec57c3ccd8133d92e98f15fe724))
