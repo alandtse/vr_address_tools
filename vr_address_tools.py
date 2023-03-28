@@ -678,7 +678,11 @@ def analyze_code_offsets(defined_rel_ids: dict, defined_vr_offsets: dict):
                                 f"WARNING: {k} IDA {sse_vr[sse_addr]} and bakou {bakou_vr_addr} conversions do not match",
                             )
                     if bakou_vr_addr and code_vr_addr == bakou_vr_addr:
-                        defined_rel_ids[k]["status"] = CONFIDENCE["VERIFIED"]
+                        defined_rel_ids[k]["status"] = (
+                            CONFIDENCE["VERIFIED"]
+                            if id_vr_status.get(id, {}).get("status") is None
+                            else id_vr_status.get(id, {}).get("status")
+                        )
                         if debug:
                             print(f"MATCHED: {k} ID: {id} matches database")
                         id_vr_status[id] = defined_rel_ids[k]
@@ -688,7 +692,11 @@ def analyze_code_offsets(defined_rel_ids: dict, defined_vr_offsets: dict):
                             print(
                                 f"Using defined offset address: {id} {k} defined: {code_vr_addr}",
                             )
-                        defined_rel_ids[k]["status"] = CONFIDENCE["MANUAL"]
+                        defined_rel_ids[k]["status"] = (
+                            CONFIDENCE["MANUAL"]
+                            if id_vr_status.get(id, {}).get("status") is None
+                            else id_vr_status.get(id, {}).get("status")
+                        )
                         id_vr_status[id] = defined_rel_ids[k]
                         id_vr_status[id]["vr"] = code_vr_addr
                         verified += 1
@@ -697,7 +705,11 @@ def analyze_code_offsets(defined_rel_ids: dict, defined_vr_offsets: dict):
                             print(
                                 f"Potential mismatch with databases: {id} {k} defined: {code_vr_addr} Databases: {bakou_vr_addr} id_sse {sse_addr} sse_vr {sse_vr.get('sse_addr')}",
                             )
-                        defined_rel_ids[k]["status"] = CONFIDENCE["MANUAL"]
+                        defined_rel_ids[k]["status"] = (
+                            CONFIDENCE["MANUAL"]
+                            if id_vr_status.get(id, {}).get("status") is None
+                            else id_vr_status.get(id, {}).get("status")
+                        )
                         id_vr_status[id] = defined_rel_ids[k]
                         mismatch += 1
             except KeyError:
