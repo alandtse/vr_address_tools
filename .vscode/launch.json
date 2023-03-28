@@ -5,7 +5,7 @@
       "name": "Python: Analyze Current File",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
+      "program": "vr_address_tools.py",
       "console": "integratedTerminal",
       "args": ["../CommonLibSSE", "analyze"]
     },
@@ -14,7 +14,7 @@
       "name": "Python: Generate Current File",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
+      "program": "vr_address_tools.py",
       "console": "integratedTerminal",
       "args": ["../CommonLibVR", "generate", "--min", "1", "-d", ]
     },
@@ -22,7 +22,7 @@
       "name": "Python: Generate AE Map Current File",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
+      "program": "vr_address_tools.py",
       "console": "integratedTerminal",
       "args": ["../CommonLibSSE", "generate", "--min", "1", "-d", "-m"]
     },
@@ -30,7 +30,7 @@
       "name": "Python: Analyze Current File (FO4)",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
+      "program": "vr_address_tools.py",
       "console": "integratedTerminal",
       "args": ["../CommonLibF4", "-f", "analyze"]
     },
@@ -38,9 +38,9 @@
       "name": "Python: Generate Database (FO4)",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
+      "program": "vr_address_tools.py",
       "console": "integratedTerminal",
-      "args": ["../CommonLibF4", "-f", "generate", "--min", "1", "-d"]
+      "args": ["../CommonLibF4", "-f", "generate", "--min", "2", "-d"]
     },
     {
       "name": "Python: Extract Structs",
