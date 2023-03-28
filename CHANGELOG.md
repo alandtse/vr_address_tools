@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.1 (2023-03-28)
+### Fix
+* Fix bug where offsets not treated as hex ([`33e2d81`](https://github.com/alandtse/vr_address_tools/commit/33e2d81e412d858ceec5daa598deba08051bcdd8))
+
 ## v1.3.0 (2023-03-28)
 ### Feature
 * Add pdb parsing ([`5515e60`](https://github.com/alandtse/vr_address_tools/commit/5515e602bdded896b52a4f04df5cfcf7a2888ea7))
