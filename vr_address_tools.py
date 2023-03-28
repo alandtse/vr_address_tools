@@ -382,6 +382,7 @@ async def scan_code(
     defined_rel_ids = {}
     defined_vr_offsets = {}
     file_count = 0
+    tasks = []
     for dirpath, dirnames, filenames in os.walk(a_directory):
         rem = []
         for dirname in dirnames:
@@ -393,14 +394,17 @@ async def scan_code(
         for filename in filenames:
             if filename not in a_exclude and filename.endswith(ALL_TYPES):
                 file_count += 1
-                await scan_file(
-                    a_directory,
-                    results,
-                    defined_rel_ids,
-                    defined_vr_offsets,
-                    dirpath,
-                    filename,
+                tasks.append(
+                    scan_file(
+                        a_directory,
+                        results,
+                        defined_rel_ids,
+                        defined_vr_offsets,
+                        dirpath,
+                        filename,
+                    )
                 )
+    await asyncio.gather(*tasks)
     print(
         f"Finished scanning {file_count:n} files. rel_ids: {len(defined_rel_ids)} offsets: {len(defined_vr_offsets)} results: {len(results)}"
     )
