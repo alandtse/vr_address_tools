@@ -271,11 +271,11 @@ async def load_database(
                 name = record["PublicSym32"]["Name"]
                 offset = record["PublicSym32"]["Offset"]
                 segment = record["PublicSym32"]["Segment"]
-                found_address = PDB_BASE.get("skyrim" if skyrim else "fallout", {}).get(
+                found_base = PDB_BASE.get("skyrim" if skyrim else "fallout", {}).get(
                     segment
                 )
-                if found_address:
-                    offset_name[add_hex_strings(offset, found_address)] = name
+                if found_base:
+                    offset_name[add_hex_strings(hex(offset), found_base)] = name
             if debug:
                 print(f"{pdb_json} loaded with {len(offset_name)} entries")
     except FileNotFoundError:
