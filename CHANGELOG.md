@@ -2,6 +2,16 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.0 (2023-03-28)
+### Feature
+* Add pdb parsing ([`5515e60`](https://github.com/alandtse/vr_address_tools/commit/5515e602bdded896b52a4f04df5cfcf7a2888ea7))
+
+### Fix
+* Fix change in verified status for db entries ([`85bd306`](https://github.com/alandtse/vr_address_tools/commit/85bd3069f5a478b97c144a8e80c42383fa7c57ee))
+
+### Performance
+* Process files using async ([`425ad21`](https://github.com/alandtse/vr_address_tools/commit/425ad212a2c58bbee945f60c981bff6e20261def))
+
 ## v1.2.0 (2023-03-26)
 ### Feature
 * Add extract Struct script ([`f1486a7`](https://github.com/alandtse/vr_address_tools/commit/f1486a73149aacf44a8b2b346802ca4b7b69ce42))
