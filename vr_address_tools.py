@@ -419,19 +419,18 @@ async def scan_file(
     a_directory, results, defined_rel_ids, defined_vr_offsets, dirpath, filename
 ):
     await find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filename)
-    if not filename.lower().startswith("offset"):
+    if filename.lower().startswith("offset"):
+        await parse_offsets(defined_rel_ids, defined_vr_offsets, dirpath, filename)
         # offset files historically (particularly in commonlib) were treated special because they were a source of truth for matched addresses
         # however, newer libraries (po3/ng) use macros that already have info
-        await search_for_ids(
-            a_directory,
-            results,
-            defined_rel_ids,
-            defined_vr_offsets,
-            dirpath,
-            filename,
-        )
-    else:
-        await parse_offsets(defined_rel_ids, defined_vr_offsets, dirpath, filename)
+    await search_for_ids(
+        a_directory,
+        results,
+        defined_rel_ids,
+        defined_vr_offsets,
+        dirpath,
+        filename,
+    )
 
 
 async def search_for_ids(
