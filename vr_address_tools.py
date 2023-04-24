@@ -525,7 +525,7 @@ async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filenam
                 namespace = ""
                 for m in search:
                     result = m.groupdict()
-                    return_type = result.get("return_type")
+                    return_type = result.get("return_type", "")
                     funcName = result.get("func_name")
                     if result.get("class_decl") and namespace != result.get(
                         "class_decl"
@@ -542,18 +542,25 @@ async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filenam
                     else:
                         className = ""
                     fullName = f"{className}::{funcName}" if className else funcName
-                    args = " ".join(result.get("args").split())
+                    args = " ".join(result.get("args", "").split())
                     if result.get("id"):
                         id = int(result.get("id"))
                     elif result.get("sseid"):
                         id = int(result.get("sseid"))
+                    name_string = ""
+                    if return_type:
+                        name_string += f"{return_type} "
+                    if fullName:
+                        name_string += f"{fullName}"
+                    if args:
+                        name_string += f"({args})"
                     if id:
-                        id_name[id] = f"{return_type} {fullName}({args})"
+                        id_name[id] = name_string
                         if debug:
                             print(f"Found ID {id}: {id_name[id]}")
                     if result.get("aeid"):
                         aeid = int(result.get("aeid"))
-                        ae_name[aeid] = f"{return_type} {fullName}({args})"
+                        ae_name[aeid] = name_string
                         if debug:
                             print(f"Found AE_ID {aeid}: {ae_name[aeid]}")
         except (UnicodeDecodeError, ValueError) as ex:
@@ -589,6 +596,7 @@ async def regex_parse(defined_rel_ids, defined_vr_offsets, dirpath, filename):
                     namespace = "RE::"
                     search = re.finditer(regex, line, re.I)
                     for item_count, item in enumerate(search):
+                        name = ""
                         if item.group() and item.group(1):
                             name = item.group(1)
                         try:
@@ -598,7 +606,7 @@ async def regex_parse(defined_rel_ids, defined_vr_offsets, dirpath, filename):
                                 id = item.group(3)
                             except IndexError:
                                 id = item.group(2)
-                        if "vtable" in type_key:
+                        if "vtable" in type_key and name:
                             full_name = f"{name}_{item_count}"
                         else:
                             full_name = name
