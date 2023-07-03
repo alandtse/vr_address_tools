@@ -363,6 +363,7 @@ async def load_database(
             continue
         elif id not in id_vr and ida_addr:
             id_vr[id] = ida_addr
+            id_vr_status[id] = {"status": CONFIDENCE["SUGGESTED"]}
     if debug:
         print(f"total ids {ids} conflicts {conflicts} percentage {conflicts/ids}")
     return loaded
