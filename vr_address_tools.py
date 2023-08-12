@@ -25,11 +25,15 @@ PATTERN_GROUPS = r"rel::id(?:\s*(?P<name>\w*))(?:\(|{)\s*(?:(?P<id_with_offset>[
 RELID_PATTERN = r"(\w+){ REL::ID\(([0-9]+)\),*\s*([a-fx0-9])*\s+};"
 # po3 latest pattern RELOCATION_ID(SSE, AE) and REL_ID(SSE, AE, VR)
 # also	stl::write_thunk_call<MainLoop_Update>(REL::RelocationID(35551, 36550).address() + REL::Relocate(0x11F, 0x11F));
-RELOCATION_ID_PATTERN = r"(?P<prefix>[\w_]+)?(?:[{>(]* ?)?(?:rel::)?REL(?:OCATION)?_?ID\((?P<sse>[0-9]+),+\s*(?P<ae>[0-9]*)\)(?:,\s*OFFSET(?:_3)?\((?P<sse_offset>0x[a-f0-9]+)(?P<ae_offset>,\s*0x[a-f0-9]+)?(?P<vr_offset>,\s*0x[a-f0-9]+)?\))?(?:\s*};)?"
+# also  variantid pattern static REL::Relocation<uintptr_t> func{ REL::VariantID(63017, 63942, 0xB40550) }; // B05710, B2A980, B40550  hkbBehaviorGraph::unk
+RELOCATION_ID_PATTERN = r"(?P<prefix>[\w_]+)?(?:[{>(]* ?)?(?:rel::)?(?:REL(?:OCATION)?_?ID|VariantID)\((?P<sse>[0-9]+),+\s*(?P<ae>[0-9]*)(?:,+\s*0x(?P<vr_idoffset>[a-f0-9]*))?\)(?:,\s*OFFSET(?:_3)?\((?P<sse_offset>0x[a-f0-9]+)(?P<ae_offset>,\s*0x[a-f0-9]+)?(?P<vr_offset>,\s*0x[a-f0-9]+)?\))?(?:\s*};)?"
 # tossaponk rel:id https://github.com/tossaponk/ArcheryLocationalDamage/blob/master/src/Offsets.h
 TOSSPONK_REL_ID_PATTTERN = r"case (?P<func_name>[\w_]+)?:[^)]*rel::id\((?P<sseid>[0-9]+)\),\s*(?P<sse_offset>0x[0-9a-f]*)[^;]*rel::id\((?P<aeid>[0-9]+)\),\s*(?P<ae_offset>0x[0-9a-f]*)"
 # commonlibsse-ng patterns constexpr REL::VariantID NiRTTI_BGSAddonNodeSoundHandleExtra(514633, 400793, 0x2f8a838);
 VARIANT_ID_PATTERN = r"REL::VariantID\s+(?P<prefix>\w+)\((?P<sse>[0-9]+),+\s*(?P<ae>[0-9]*),+\s*0x(?P<vr_offset>[a-f0-9]*)\);"
+# ersh variantID
+# regex = REL::VariantID\s*(?P<prefix>\w+)?\((?P<sse>[0-9]+),+\s*(?P<ae>[0-9]*),+\s*0x(?P<vr_offset>[a-f0-9]*)\)
+# static REL::Relocation<uintptr_t> func{ REL::VariantID(63017, 63942, 0xB40550) }; // B05710, B2A980, B40550  hkbBehaviorGraph::unk
 # Maxsu
 # NodeArray& init_withNode_withname(NodeArray& array, const char* name, CombatBehaviorTreeNode* node)
 # {
@@ -466,9 +470,18 @@ async def search_for_ids(
                     if matches:
                         for match in matches:
                             if any(match):
+                                sse_id = int(match["sse"])
+                                ae_id = int(match.get("ae"))
                                 if match.get("sse") and match.get("ae"):
                                     # update AE match database based on found items
-                                    sse_ae[int(match["sse"])] = int(match.get("ae"))
+                                    sse_ae[sse_id] = ae_id
+                                if match.get("sse") and match.get("vr_idoffset"):
+                                    # update VR match database based on found items
+                                    vr = add_hex_strings(
+                                        match.get("vr_idoffset"), SKYRIM_BASE
+                                    )
+                                    if sse_vr.get(sse_id) is None:
+                                        sse_vr[sse_id] = vr
                                 results.append(
                                     {
                                         "i": i,

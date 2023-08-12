@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v1.4.0 (2023-05-31)
+### Feature
+
+* Add variantid detecion ([`dec0d56`](https://github.com/alandtse/vr_address_tools/commit/dec0d56da92778b4da40b4d912d3326ee58cdb8d))
+
 ## v1.3.1 (2023-03-28)
 ### Fix
 * Fix bug where offsets not treated as hex ([`33e2d81`](https://github.com/alandtse/vr_address_tools/commit/33e2d81e412d858ceec5daa598deba08051bcdd8))
