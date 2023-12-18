@@ -2,6 +2,41 @@
 
 
 
+## v1.5.1 (2023-12-18)
+
+### Build
+
+* build: update submodules ([`7a71fad`](https://github.com/alandtse/vr_address_tools/commit/7a71fad6ec54c8fa4a501e7fc7cfbe17e1a076e2))
+
+* build: update submodules ([`b00ac37`](https://github.com/alandtse/vr_address_tools/commit/b00ac3710a31712b9893b1f1c121b112783c4671))
+
+* build: update submodules ([`0405216`](https://github.com/alandtse/vr_address_tools/commit/0405216c1d441dc1e9bd892e41c5957ff49ba92c))
+
+* build: update submodules ([`af2b38b`](https://github.com/alandtse/vr_address_tools/commit/af2b38b755f59539d230bdf552fdb43be931f68d))
+
+* build: update submodules ([`a13ab1a`](https://github.com/alandtse/vr_address_tools/commit/a13ab1a7cf7fff7abbfc61a0393adff1e00b6cd6))
+
+* build: update submodules ([`beffe92`](https://github.com/alandtse/vr_address_tools/commit/beffe923d9e5b6960c1f00a23b6bdab4ab52dea5))
+
+* build: update submodules ([`c92274c`](https://github.com/alandtse/vr_address_tools/commit/c92274cbc6f31bf30ff453de12a6842e5ce1459d))
+
+* build: update submodules ([`ebc35bd`](https://github.com/alandtse/vr_address_tools/commit/ebc35bd4eb4c9a2f1f1c78b54a75c0e5661cb5de))
+
+* build: update submodules ([`37ee14a`](https://github.com/alandtse/vr_address_tools/commit/37ee14a2d20578b5e44192fc5a39f20cf0e83b7e))
+
+* build: update submodules ([`88904e5`](https://github.com/alandtse/vr_address_tools/commit/88904e555d42217ac818c5e420e6968a49c566f5))
+
+* build: update submodules ([`03f8303`](https://github.com/alandtse/vr_address_tools/commit/03f83030c649e5297cf2e8e49edc47f52920e91f))
+
+### Fix
+
+* fix: fix keyerrors in match ([`c9533f9`](https://github.com/alandtse/vr_address_tools/commit/c9533f9c4752d19b18894bbbccd0df2e61062ac4))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`469f4fa`](https://github.com/alandtse/vr_address_tools/commit/469f4faa8c3acfe2829c7e1e95b5369159fd8911))
+
+
 ## v1.5.0 (2023-08-12)
 
 ### Build
@@ -17,6 +52,13 @@
 * build: update submodules ([`35e94e4`](https://github.com/alandtse/vr_address_tools/commit/35e94e4e22ed63bf640492cb872fafb7c38d0fe5))
 
 * build: update submodules ([`fba3ebd`](https://github.com/alandtse/vr_address_tools/commit/fba3ebd537d086d77673d64a56db13f123ce6ed3))
+
+### Fix
+
+* fix: use suggested address through sse_vr.csv
+
+This should be a suggested address that mapped through indirect link
+id_sse -&gt; sse_vr. ([`2767f6d`](https://github.com/alandtse/vr_address_tools/commit/2767f6d8b1f0b2ca9d2fa02cec30a11f33087da0))
 
 ### Unknown
 
