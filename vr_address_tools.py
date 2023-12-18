@@ -27,6 +27,8 @@ RELID_PATTERN = r"(\w+){ REL::ID\(([0-9]+)\),*\s*([a-fx0-9])*\s+};"
 # also	stl::write_thunk_call<MainLoop_Update>(REL::RelocationID(35551, 36550).address() + REL::Relocate(0x11F, 0x11F));
 # also  variantid pattern static REL::Relocation<uintptr_t> func{ REL::VariantID(63017, 63942, 0xB40550) }; // B05710, B2A980, B40550  hkbBehaviorGraph::unk
 RELOCATION_ID_PATTERN = r"(?P<prefix>[\w_]+)?(?:[{>(]* ?)?(?:rel::)?(?:REL(?:OCATION)?_?ID|VariantID)\((?P<sse>[0-9]+),+\s*(?P<ae>[0-9]*)(?:,+\s*0x(?P<vr_idoffset>[a-f0-9]*))?\)(?:,\s*OFFSET(?:_3)?\((?P<sse_offset>0x[a-f0-9]+)(?P<ae_offset>,\s*0x[a-f0-9]+)?(?P<vr_offset>,\s*0x[a-f0-9]+)?\))?(?:\s*};)?"
+# tossaponk rel:id https://github.com/tossaponk/ArcheryLocationalDamage/blob/master/src/Offsets.h
+TOSSPONK_REL_ID_PATTTERN = r"case (?P<func_name>[\w_]+)?:[^)]*rel::id\((?P<sseid>[0-9]+)\),\s*(?P<sse_offset>0x[0-9a-f]*)[^;]*rel::id\((?P<aeid>[0-9]+)\),\s*(?P<ae_offset>0x[0-9a-f]*)"
 # commonlibsse-ng patterns constexpr REL::VariantID NiRTTI_BGSAddonNodeSoundHandleExtra(514633, 400793, 0x2f8a838);
 VARIANT_ID_PATTERN = r"REL::VariantID\s+(?P<prefix>\w+)\((?P<sse>[0-9]+),+\s*(?P<ae>[0-9]*),+\s*0x(?P<vr_offset>[a-f0-9]*)\);"
 # ersh variantID
@@ -70,6 +72,7 @@ GENERIC_FOO_REGEX = r"(?P<return_type>[\w<>:*&]+)\s+(?:\w+::)?(?P<func_name>[\w]
 ARGS_REGEX = r"(?P<arg_pair>(?:const )?(?P<arg_type>[\w*&:_]+)\s+(?P<arg>[\w_]*)),?"
 FUNCTION_REGEX_PARSE_DICT = {
     "decltype": FUNCTION_REGEX,
+    "tossponk": TOSSPONK_REL_ID_PATTTERN,
     "generic_foo": GENERIC_FOO_REGEX,
 }
 REPLACEMENT = """
@@ -424,19 +427,18 @@ async def scan_file(
     a_directory, results, defined_rel_ids, defined_vr_offsets, dirpath, filename
 ):
     await find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filename)
-    if not filename.lower().startswith("offset"):
+    if filename.lower().startswith("offset"):
+        await parse_offsets(defined_rel_ids, defined_vr_offsets, dirpath, filename)
         # offset files historically (particularly in commonlib) were treated special because they were a source of truth for matched addresses
         # however, newer libraries (po3/ng) use macros that already have info
-        await search_for_ids(
-            a_directory,
-            results,
-            defined_rel_ids,
-            defined_vr_offsets,
-            dirpath,
-            filename,
-        )
-    else:
-        await parse_offsets(defined_rel_ids, defined_vr_offsets, dirpath, filename)
+    await search_for_ids(
+        a_directory,
+        results,
+        defined_rel_ids,
+        defined_vr_offsets,
+        dirpath,
+        filename,
+    )
 
 
 async def search_for_ids(
@@ -540,7 +542,7 @@ async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filenam
                 namespace = ""
                 for m in search:
                     result = m.groupdict()
-                    return_type = result.get("return_type")
+                    return_type = result.get("return_type", "")
                     funcName = result.get("func_name")
                     if result.get("class_decl") and namespace != result.get(
                         "class_decl"
@@ -557,18 +559,25 @@ async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filenam
                     else:
                         className = ""
                     fullName = f"{className}::{funcName}" if className else funcName
-                    args = " ".join(result.get("args").split())
+                    args = " ".join(result.get("args", "").split())
                     if result.get("id"):
                         id = int(result.get("id"))
                     elif result.get("sseid"):
                         id = int(result.get("sseid"))
+                    name_string = ""
+                    if return_type:
+                        name_string += f"{return_type} "
+                    if fullName:
+                        name_string += f"{fullName}"
+                    if args:
+                        name_string += f"({args})"
                     if id:
-                        id_name[id] = f"{return_type} {fullName}({args})"
+                        id_name[id] = name_string
                         if debug:
                             print(f"Found ID {id}: {id_name[id]}")
                     if result.get("aeid"):
                         aeid = int(result.get("aeid"))
-                        ae_name[aeid] = f"{return_type} {fullName}({args})"
+                        ae_name[aeid] = name_string
                         if debug:
                             print(f"Found AE_ID {aeid}: {ae_name[aeid]}")
         except (UnicodeDecodeError, ValueError) as ex:
@@ -604,6 +613,7 @@ async def regex_parse(defined_rel_ids, defined_vr_offsets, dirpath, filename):
                     namespace = "RE::"
                     search = re.finditer(regex, line, re.I)
                     for item_count, item in enumerate(search):
+                        name = ""
                         if item.group() and item.group(1):
                             name = item.group(1)
                         try:
@@ -613,7 +623,7 @@ async def regex_parse(defined_rel_ids, defined_vr_offsets, dirpath, filename):
                                 id = item.group(3)
                             except IndexError:
                                 id = item.group(2)
-                        if "vtable" in type_key:
+                        if "vtable" in type_key and name:
                             full_name = f"{name}_{item_count}"
                         else:
                             full_name = name
