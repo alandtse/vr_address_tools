@@ -469,10 +469,10 @@ async def search_for_ids(
                     if matches:
                         for match in matches:
                             if any(match):
-                                sse_id = int(match["sse"])
-                                ae_id = int(match.get("ae"))
                                 if match.get("sse") and match.get("ae"):
                                     # update AE match database based on found items
+                                    sse_id = int(match["sse"])
+                                    ae_id = int(match.get("ae"))
                                     sse_ae[sse_id] = ae_id
                                 if match.get("sse") and match.get("vr_idoffset"):
                                     # update VR match database based on found items
