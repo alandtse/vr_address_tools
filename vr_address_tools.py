@@ -973,9 +973,7 @@ async def write_csv(
     outputfile = (
         f"{file_prefix}-{version}.csv"
         if not generate_database
-        else f"database.csv"
-        if skyrim
-        else "fo4_database.csv"
+        else f"database.csv" if skyrim else "fo4_database.csv"
     )
     output = {}
     if min_confidence is not None and isinstance(min_confidence, int):
