@@ -471,6 +471,9 @@ async def search_for_ids(
                     if matches:
                         for match in matches:
                             if any(match):
+                                if int(match.get("sse", 0)) < 1:
+                                    # ids must be >= 0
+                                    continue
                                 if match.get("sse") and match.get("ae"):
                                     # update AE match database based on found items
                                     sse_id = int(match["sse"])
@@ -671,6 +674,8 @@ async def cpp_header_parse(
             search = re.search(OFFSET_RELID_PATTERN, func.get("debug"), re.I)
             if search and search.groups():
                 id = search.groups()[1]
+                if int(id) < 1:
+                    continue
                 if debug:
                     print("Found rel::id", name, id)
                 defined_rel_ids[f"{namespace}{name}"] = {
