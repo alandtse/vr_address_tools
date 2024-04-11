@@ -2,6 +2,29 @@
 
 
 
+## v1.6.0 (2024-04-11)
+
+### Build
+
+* build: update submodules ([`f0c8fa9`](https://github.com/alandtse/vr_address_tools/commit/f0c8fa9bc084fb87ce0ad80b194c81d51b7e9dad))
+
+* build: update submodules ([`f624d75`](https://github.com/alandtse/vr_address_tools/commit/f624d756459ac22ce9232023dcd8df3f98ea1c3c))
+
+* build: update submodules ([`506fd33`](https://github.com/alandtse/vr_address_tools/commit/506fd330c74d66fb39a629afe98dbced504b4bcb))
+
+* build: update submodules ([`da6466b`](https://github.com/alandtse/vr_address_tools/commit/da6466b2ab99884125e24a5a05882e8d6f61d987))
+
+* build: update submodules ([`bb9c72c`](https://github.com/alandtse/vr_address_tools/commit/bb9c72c733db17bd8b0e81d3e4cb2ebf50366db7))
+
+* build: update submodules ([`37fe38f`](https://github.com/alandtse/vr_address_tools/commit/37fe38f42c0d38f2f3b2f0754f10adc3f06b6e21))
+
+* build: update submodules ([`3d0bc42`](https://github.com/alandtse/vr_address_tools/commit/3d0bc426501ec1bc6b3b9b3b8ab2a436d52c212b))
+
+### Feature
+
+* feat: add capture support for DKUtil::Hook::IDToAbs (#12) ([`3c3ee7e`](https://github.com/alandtse/vr_address_tools/commit/3c3ee7e317774e5f1b459454bfea025b44eace72))
+
+
 ## v1.5.2 (2024-03-04)
 
 ### Build
