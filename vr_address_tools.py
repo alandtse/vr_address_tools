@@ -40,6 +40,8 @@ VARIANT_ID_PATTERN = r"REL::VariantID\s+(?P<prefix>\w+)\((?P<sse>[0-9]+),+\s*(?P
 # 	return _generic_foo<46261, NodeArray&, NodeArray&, const char*, CombatBehaviorTreeNode*>(array, name, node);
 # }
 GENERIC_FOO_ID = r"_generic_foo<(?P<sse>[0-9]+),"
+# DKUtil IDToAbs, DKUtil uses alphabetical order so AE ID goes first DKUtil::Hook::IDToAbs(50643, 49716)
+DKUTIL_ID_TO_ABS_PATTERN = r"DKUtil::Hook::IDToAbs\((?P<ae>[0-9]+),+\s*(?P<sse>[0-9]*)(?:,+\s*0x(?P<vr_idoffset>[a-f0-9]*))?\)"
 ## These are regexes for parsing offset files that typically can help define relationships (older commonlibvr); po3 and ng now allow for definition through macro use
 # commonlibsse-ng patterns
 # namespace BSSoundHandle
@@ -56,7 +58,12 @@ OFFSET_OFFSET_PATTERN = (
     r"(?:inline|constexpr) REL::Offset\s+(\w+)\s*(?:\(|\{)\s*([a-fx0-9]+)"
 )
 IFNDEF_PATTERN = r"([\w():]*)\s*{\s*#ifndef SKYRIMVR\s*([^{]*){\s*rel::id\(([0-9]*)\)\s}.*\s*#else\s*\2{.*(?:rel::offset)*(0x[0-9a-f]*)"
-RELID_MATCH_ARRAY = [PATTERN_GROUPS, RELOCATION_ID_PATTERN, GENERIC_FOO_ID]
+RELID_MATCH_ARRAY = [
+    PATTERN_GROUPS,
+    RELOCATION_ID_PATTERN,
+    GENERIC_FOO_ID,
+    DKUTIL_ID_TO_ABS_PATTERN,
+]
 REL_ID_VTABLE = "rel::id vtable"
 REL_OFFSET_VTABLE = "rel::offset vtable"
 REL_ID = "rel::id"
