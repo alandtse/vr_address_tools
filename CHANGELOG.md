@@ -1,6 +1,66 @@
 # CHANGELOG
 
+## v1.6.1 (2024-06-20)
 
+### Build
+
+* build: update submodules ([`2533486`](https://github.com/alandtse/vr_address_tools/commit/2533486a3c2766ba8df4efff1614306c98d9f072))
+
+* build: update submodules ([`23d1147`](https://github.com/alandtse/vr_address_tools/commit/23d114750d525337c7e7daa3663b4302239a81a6))
+
+* build: update submodules ([`15dab4b`](https://github.com/alandtse/vr_address_tools/commit/15dab4b7d71c8c7482c47376fe96246db13bf233))
+
+* build: update submodules ([`fc3f0c1`](https://github.com/alandtse/vr_address_tools/commit/fc3f0c158e0f57cb253171c2538a76a7feef3061))
+
+* build: update submodules ([`019be3c`](https://github.com/alandtse/vr_address_tools/commit/019be3c1d40b0891ff0e66576254621a99e18d88))
+
+* build: update submodules ([`7239e79`](https://github.com/alandtse/vr_address_tools/commit/7239e79165bf9de6933f8bfc0c857d5598d35239))
+
+* build: update submodules ([`34e9175`](https://github.com/alandtse/vr_address_tools/commit/34e917552c7a274a79ad64d1f6133d9c83b3c540))
+
+* build: update submodules ([`2bbcb0c`](https://github.com/alandtse/vr_address_tools/commit/2bbcb0ccedee308d49804f09e22395d34de463ed))
+
+* build: update submodules ([`d7993e6`](https://github.com/alandtse/vr_address_tools/commit/d7993e69cd5d03010be15c544d44deb99a748659))
+
+* build: update submodules ([`76830ab`](https://github.com/alandtse/vr_address_tools/commit/76830ab76bcc49e143e47664a6e0e59574c0573a))
+
+* build: update submodules ([`a52abe3`](https://github.com/alandtse/vr_address_tools/commit/a52abe38278f3a6e5098557ebd4c3aedf6420b79))
+
+* build: update submodules ([`ea710c8`](https://github.com/alandtse/vr_address_tools/commit/ea710c81346cbc5581280937cd2e71852cbb699d))
+
+* build: update submodules ([`3a4997a`](https://github.com/alandtse/vr_address_tools/commit/3a4997ae6216aa50cf214892b895f73d9220cc0b))
+
+* build: update submodules ([`8b182ec`](https://github.com/alandtse/vr_address_tools/commit/8b182ec0efcd4ba15a82eab244a54b7f50fb9c28))
+
+* build: update submodules ([`e20756f`](https://github.com/alandtse/vr_address_tools/commit/e20756f076ca0ac53de24313ad0938e7cc58b7c8))
+
+* build: update submodules ([`1613ad8`](https://github.com/alandtse/vr_address_tools/commit/1613ad85c4852feb485cff9957154c4f4b5e9f06))
+
+* build: update submodules ([`5c817a6`](https://github.com/alandtse/vr_address_tools/commit/5c817a6daf01fed5d85f3b86dfa170e2fb37eeca))
+
+* build: update submodules ([`3a68813`](https://github.com/alandtse/vr_address_tools/commit/3a68813eeebeebbb27d1ff5d845e242ad69c8168))
+
+* build: update submodules ([`b4dd822`](https://github.com/alandtse/vr_address_tools/commit/b4dd822725b0821f8e2343f7d75b3cf5f5d72f5e))
+
+* build: update submodules ([`605d7c1`](https://github.com/alandtse/vr_address_tools/commit/605d7c1a314118c01a4db11aff62ed0c508e4453))
+
+* build: update submodules ([`f5d997d`](https://github.com/alandtse/vr_address_tools/commit/f5d997df352bbcc945941cd0035e41ea3ef43506))
+
+* build: update submodules ([`499ecee`](https://github.com/alandtse/vr_address_tools/commit/499ecee3c29864c66f23334033adc76505c73f5c))
+
+* build: update submodules ([`5a9fc97`](https://github.com/alandtse/vr_address_tools/commit/5a9fc9767cee2848b650b5405bacd627555a0b06))
+
+* build: update submodules ([`6eddb49`](https://github.com/alandtse/vr_address_tools/commit/6eddb49976658361793e2533e979abe5db0c5ef2))
+
+### Fix
+
+* fix: catch rel::id with only id
+
+Handle a single entry REL::ID(1) which was getting skipped. ([`768aa8f`](https://github.com/alandtse/vr_address_tools/commit/768aa8fb5db3d2ec9f7ea571f0edb9a58eda306e))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`160ff83`](https://github.com/alandtse/vr_address_tools/commit/160ff83c29a7a23a37755de010105b230e0e320d))
 
 ## v1.6.0 (2024-04-11)
 
@@ -23,7 +83,6 @@
 ### Feature
 
 * feat: add capture support for DKUtil::Hook::IDToAbs (#12) ([`3c3ee7e`](https://github.com/alandtse/vr_address_tools/commit/3c3ee7e317774e5f1b459454bfea025b44eace72))
-
 
 ## v1.5.2 (2024-03-04)
 
@@ -67,7 +126,6 @@ Lock aiocsv to 1.2.5 ([`8460fac`](https://github.com/alandtse/vr_address_tools/c
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`c2e8aeb`](https://github.com/alandtse/vr_address_tools/commit/c2e8aeb8d981b8ed13066d509d22bf9881db9c85))
 
-
 ## v1.5.1 (2023-12-18)
 
 ### Build
@@ -102,7 +160,6 @@ Lock aiocsv to 1.2.5 ([`8460fac`](https://github.com/alandtse/vr_address_tools/c
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`469f4fa`](https://github.com/alandtse/vr_address_tools/commit/469f4faa8c3acfe2829c7e1e95b5369159fd8911))
 
-
 ## v1.5.0 (2023-08-12)
 
 ### Build
@@ -129,7 +186,6 @@ id_sse -&gt; sse_vr. ([`2767f6d`](https://github.com/alandtse/vr_address_tools/c
 ### Unknown
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`3fac1db`](https://github.com/alandtse/vr_address_tools/commit/3fac1dba2b9c65ecc6759871fafa6ae6abe0524d))
-
 
 ## v1.4.0 (2023-05-31)
 
@@ -182,7 +238,6 @@ treating them the same as other files ([`ead7133`](https://github.com/alandtse/v
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`dc84283`](https://github.com/alandtse/vr_address_tools/commit/dc84283cc42efdc783ff32f3ee2ba91bce431f91))
 
-
 ## v1.3.1 (2023-03-28)
 
 ### Build
@@ -196,7 +251,6 @@ treating them the same as other files ([`ead7133`](https://github.com/alandtse/v
 ### Unknown
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`d388ad6`](https://github.com/alandtse/vr_address_tools/commit/d388ad6e18d761ca5ddf8bdfbaddcba8052656e4))
-
 
 ## v1.3.0 (2023-03-28)
 
@@ -230,7 +284,6 @@ database. The database should be considered the source of truth. ([`85bd306`](ht
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`d03dd60`](https://github.com/alandtse/vr_address_tools/commit/d03dd607b0d09fbd83dc6792ba4ef96cc622ab9b))
 
-
 ## v1.2.0 (2023-03-26)
 
 ### Build
@@ -253,7 +306,6 @@ This is intended to parse commonlib for Ghidra ([`f1486a7`](https://github.com/a
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`0c6bb42`](https://github.com/alandtse/vr_address_tools/commit/0c6bb42af9c2e913aeaf5e0a6c6fc60077c0b1fd))
 
-
 ## v1.1.1 (2023-03-23)
 
 ### Fix
@@ -263,7 +315,6 @@ This is intended to parse commonlib for Ghidra ([`f1486a7`](https://github.com/a
 ### Unknown
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`b57422a`](https://github.com/alandtse/vr_address_tools/commit/b57422a46344fda6a1b4d3fbc708f64e53135d00))
-
 
 ## v1.1.0 (2023-03-21)
 
@@ -319,7 +370,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`2e83024`](https://g
 * Merge pull request #3 from alandtse/dependabot/pip/gitpython-3.1.30
 
 build(deps): bump gitpython from 3.1.29 to 3.1.30 ([`b5a71cf`](https://github.com/alandtse/vr_address_tools/commit/b5a71cf47e458fc74c3c17d2b819c5169a9095db))
-
 
 ## v1.0.1 (2023-03-18)
 
@@ -420,7 +470,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`e96a0f3`](https://g
 build(deps): bump certifi from 2022.9.24 to 2022.12.7 ([`6fbe3eb`](https://github.com/alandtse/vr_address_tools/commit/6fbe3eb351ccdba396afbd41d1ab37e6a9acbb77))
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`58c92a4`](https://github.com/alandtse/vr_address_tools/commit/58c92a45324da75c696c1c1b078727f5f4c49df3))
-
 
 ## v1.0.0 (2022-12-01)
 
