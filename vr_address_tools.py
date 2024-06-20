@@ -478,7 +478,7 @@ async def search_for_ids(
                     if matches:
                         for match in matches:
                             if any(match):
-                                if int(match.get("sse", 0)) < 1:
+                                if int(match.get("sse", 0)) < 1 and int(match.get("id", 0)) < 1:
                                     # ids must be >= 0
                                     continue
                                 if match.get("sse") and match.get("ae"):
