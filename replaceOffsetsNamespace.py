@@ -6,6 +6,9 @@ from typing import Dict, Tuple, Union
 # Define a type alias for offsets
 OffsetsType = Dict[str, Union[int, Tuple[int, Union[int, Tuple]]]]
 
+CommonLibOffsets = r".*REL::ID (\w+)\(static_cast<std::uint64_t>\((\d+)\)\);"
+CommonLibNGOffsets = r".*constexpr auto (\w+) = RELOCATION_ID\((\d+), (\d+)\);"
+NGMode = False
 
 def extract_offsets(offset_file_path: str) -> OffsetsType:
     """
@@ -19,29 +22,44 @@ def extract_offsets(offset_file_path: str) -> OffsetsType:
     """
     offsets: OffsetsType = {}
     namespace_stack = []
-
+    global NGMode
     with open(offset_file_path, "r") as file:
         lines = file.readlines()
 
     for line in lines:
-        namespace_match = re.match(r"\s*namespace (\w+)", line)
+        namespace_match = re.match(r"\s*namespace ([\w:]+)", line)
         if namespace_match:
-            namespace_stack.append(namespace_match.group(1))
+            split_namespace = namespace_match.group(1).split("::")
+            if split_namespace:
+                for split in split_namespace:
+                    namespace_stack.append(split)
+            else:    
+                namespace_stack.append(namespace_match.group(1))
         elif re.match(r"\s*}\s*", line):
             if namespace_stack:
                 namespace_stack.pop()
         else:
             offset_match = re.match(
-                r".*REL::ID (\w+)\(static_cast<std::uint64_t>\((\d+)\)\);", line
+                CommonLibNGOffsets, line
+            )
+            if offset_match:
+                NGMode = True
+            if not NGMode:    
+                offset_match = re.match(
+                CommonLibOffsets, line
             )
             if offset_match and namespace_stack:
                 func_name = offset_match.group(1)
-                func_id = int(offset_match.group(2))
                 key = "::".join(namespace_stack) + f"::{func_name}"
-                if key in offsets:
-                    offsets[key] = (func_id, offsets[key])
+                if not NGMode:
+                    func_id = int(offset_match.group(2))
+                    if key in offsets:
+                        offsets[key] = (func_id, offsets[key])
+                    else:
+                        offsets[key] = func_id
                 else:
-                    offsets[key] = func_id
+                    offsets[key] = (int(offset_match.group(2)), int(offset_match.group(3)))
+                
 
     return offsets
 
@@ -59,6 +77,7 @@ def replace_offsets_in_file(
     Returns:
         Tuple[int, int]: Number of offsets replaced and number of warnings.
     """
+    global NGMode
     warnings = 0
     with open(file_path, "r") as file:
         content = file.read()
