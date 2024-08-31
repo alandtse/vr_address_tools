@@ -478,7 +478,10 @@ async def search_for_ids(
                     if matches:
                         for match in matches:
                             if any(match):
-                                if int(match.get("sse", 0)) < 1 and int(match.get("id", 0)) < 1:
+                                if (
+                                    int(match.get("sse", 0)) < 1
+                                    and int(match.get("id", 0)) < 1
+                                ):
                                     # ids must be >= 0
                                     continue
                                 if match.get("sse") and match.get("ae"):
@@ -544,8 +547,8 @@ async def search_for_ids(
 async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filename):
     global id_name
     global ae_name
-    async with aiofiles.open(f"{dirpath}/{filename}", "r+") as f:
-        try:
+    try:
+        async with aiofiles.open(f"{dirpath}/{filename}", "r+") as f:
             data = mmap.mmap(f.fileno(), 0).read().decode("utf-8")
             for type_key, regex in FUNCTION_REGEX_PARSE_DICT.items():
                 search = re.finditer(regex, await preProcessData(data), re.I)
@@ -590,8 +593,8 @@ async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filenam
                         ae_name[aeid] = name_string
                         if debug:
                             print(f"Found AE_ID {aeid}: {ae_name[aeid]}")
-        except (UnicodeDecodeError, ValueError) as ex:
-            print(f"Unable to read {dirpath}/{filename}: ", ex)
+    except (UnicodeDecodeError, ValueError, PermissionError) as ex:
+        print(f"Unable to read {dirpath}/{filename}: ", ex)
 
 
 async def parse_offsets(defined_rel_ids, defined_vr_offsets, dirpath, filename):
