@@ -462,8 +462,8 @@ async def search_for_ids(
         filename (str): filename
     """
     found_ifndef = False
-    async with aiofiles.open(f"{dirpath}/{filename}", "r+") as f:
-        try:
+    try:
+        async with aiofiles.open(f"{dirpath}/{filename}", "r+") as f:
             data = mmap.mmap(f.fileno(), 0).read().decode("utf-8")
             f = await preProcessData(data)
             for i, line in enumerate(f.splitlines()):
@@ -540,8 +540,8 @@ async def search_for_ids(
                             print(
                                 f"Found ifndef {filename}::{name} with id: {id} offset: {offset}"
                             )
-        except (UnicodeDecodeError, ValueError) as ex:
-            print(f"Unable to read {dirpath}/{filename}: ", ex)
+    except (UnicodeDecodeError, ValueError, PermissionError) as ex:
+        print(f"Unable to read {dirpath}/{filename}: ", ex)
 
 
 async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filename):
