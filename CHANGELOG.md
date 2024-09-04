@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v1.6.3 (2024-09-04)
+
+### Build
+
+* build: update submodules ([`362abef`](https://github.com/alandtse/vr_address_tools/commit/362abefaa8647691a927713d36b37b464a49765b))
+
+* build: update submodules ([`a452a91`](https://github.com/alandtse/vr_address_tools/commit/a452a910bd8d3d8de0e20e142bd8ecf219671f65))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`d307ac6`](https://github.com/alandtse/vr_address_tools/commit/d307ac6532482de9acd9f64c64b411a58f12db7e))
+
 ## v1.6.2 (2024-08-31)
 
 ### Build
@@ -49,6 +61,8 @@
 * chore(replaceOffsetsNamespace): allow handling of NG ([`3848de1`](https://github.com/alandtse/vr_address_tools/commit/3848de1f07387ff82910373ef30da7785d9a0c9e))
 
 ### Fix
+
+* fix: handle permission errors ([`e39f479`](https://github.com/alandtse/vr_address_tools/commit/e39f4798288cc9afa053a17ea8b4e9c867a55a18))
 
 * fix: handle permission errors ([`66a0d68`](https://github.com/alandtse/vr_address_tools/commit/66a0d682126a24adefd4d9191dfcfbee42f5ad37))
 
