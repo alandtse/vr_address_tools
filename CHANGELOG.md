@@ -1,5 +1,63 @@
 # CHANGELOG
 
+## v1.6.2 (2024-08-31)
+
+### Build
+
+* build: update submodules ([`76f17e9`](https://github.com/alandtse/vr_address_tools/commit/76f17e95d09d025fdfdcb25e9a3d5768a43fa0d7))
+
+* build: update submodules ([`80c9fd5`](https://github.com/alandtse/vr_address_tools/commit/80c9fd55cbaaf53de22b808bac5b9d14c72795dd))
+
+* build: update submodules ([`dff9770`](https://github.com/alandtse/vr_address_tools/commit/dff9770014f4755903e359b641fb73786938e662))
+
+* build: update submodules ([`4ec0ae6`](https://github.com/alandtse/vr_address_tools/commit/4ec0ae64c38158489f8b0e85d4df55555a10e032))
+
+* build: update submodules ([`525700f`](https://github.com/alandtse/vr_address_tools/commit/525700f47a025c604ee11368c8437361c9f07c1b))
+
+* build: update submodules ([`aff88dc`](https://github.com/alandtse/vr_address_tools/commit/aff88dc30e4c819fdb46857b9e961001d7faa64f))
+
+* build: update submodules ([`8ce6571`](https://github.com/alandtse/vr_address_tools/commit/8ce6571af0b54444eb707ade2e6b3f3417c00fc0))
+
+* build: update submodules ([`5153a1a`](https://github.com/alandtse/vr_address_tools/commit/5153a1ad8b3e45df543d37d346419a4322818da9))
+
+* build: update submodules ([`a3a8ce7`](https://github.com/alandtse/vr_address_tools/commit/a3a8ce707f7c672fb98380bcbe4077a9e37c756d))
+
+* build: update submodules ([`72b69b1`](https://github.com/alandtse/vr_address_tools/commit/72b69b17febe6d5bf76ba15c82d19afc3e4f4684))
+
+* build: update submodules ([`288a74a`](https://github.com/alandtse/vr_address_tools/commit/288a74a3878835b34322649bb10791f254edd569))
+
+* build: update submodules ([`943297b`](https://github.com/alandtse/vr_address_tools/commit/943297bf81b11ceefa593edffeb2491b85f31e84))
+
+* build: update submodules ([`80d746f`](https://github.com/alandtse/vr_address_tools/commit/80d746f362460995bb37fc6a7c8ebbdefdbff5e6))
+
+* build: update submodules ([`98867e0`](https://github.com/alandtse/vr_address_tools/commit/98867e07c125dd4d4c4ff778d1650ea541791590))
+
+* build: update submodules ([`9965ceb`](https://github.com/alandtse/vr_address_tools/commit/9965ceb11d4146412de6e96ec7d00d48be5996a7))
+
+* build: update submodules ([`d423297`](https://github.com/alandtse/vr_address_tools/commit/d42329779a541b886bb423918fffd8060bfb8c3a))
+
+* build: update submodules ([`74d0ff2`](https://github.com/alandtse/vr_address_tools/commit/74d0ff2cee3df1e6b9c30abe5ac66c6a97da59ba))
+
+* build: update submodules ([`5cad3c2`](https://github.com/alandtse/vr_address_tools/commit/5cad3c28295468c533c1fe6e513f84799d6d1c51))
+
+* build: update submodules ([`a31b859`](https://github.com/alandtse/vr_address_tools/commit/a31b8591538301f4c6942e2a0b72c4fa094b053e))
+
+* build: update submodules ([`4184d27`](https://github.com/alandtse/vr_address_tools/commit/4184d273bbe471192e1e53cf86bada20eac04f25))
+
+### Chore
+
+* chore(replaceOffsetsNamespace): allow handling of NG ([`3848de1`](https://github.com/alandtse/vr_address_tools/commit/3848de1f07387ff82910373ef30da7785d9a0c9e))
+
+### Fix
+
+* fix: handle permission errors ([`66a0d68`](https://github.com/alandtse/vr_address_tools/commit/66a0d682126a24adefd4d9191dfcfbee42f5ad37))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`ffc1c96`](https://github.com/alandtse/vr_address_tools/commit/ffc1c9686c2120683c53c51185b80401c0d78abd))
+
+* Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`6228077`](https://github.com/alandtse/vr_address_tools/commit/6228077e235f46d37cf7a5190fda0e91c0d1b370))
+
 ## v1.6.1 (2024-06-20)
 
 ### Build
@@ -52,6 +110,14 @@
 
 * build: update submodules ([`6eddb49`](https://github.com/alandtse/vr_address_tools/commit/6eddb49976658361793e2533e979abe5db0c5ef2))
 
+### Chore
+
+* chore: add replaceOffsetsNamespace script
+
+This file allows modifying a commonlib to remove use of the offsets
+namespace. This may be desirable so that vr_address_tool can parse out
+the raw offsets without parsing the offsets file. ([`dbea9e4`](https://github.com/alandtse/vr_address_tools/commit/dbea9e4ad28bb2ea0e1c5d59d3a2c191e6f8fdd5))
+
 ### Fix
 
 * fix: catch rel::id with only id
@@ -90,11 +156,11 @@ Handle a single entry REL::ID(1) which was getting skipped. ([`768aa8f`](https:/
 
 * build: update submodules ([`6c15d25`](https://github.com/alandtse/vr_address_tools/commit/6c15d2530100fde64331f4fe6ad205f07935080c))
 
+* build: update submodules ([`7901ee5`](https://github.com/alandtse/vr_address_tools/commit/7901ee54e7405e00be7bc050016c45c4abc0d6f6))
+
 * build: bump deps
 
 Lock aiocsv to 1.2.5 ([`8460fac`](https://github.com/alandtse/vr_address_tools/commit/8460facebefd70aca1efff7cc46932c51dbb8ab8))
-
-* build: update submodules ([`7901ee5`](https://github.com/alandtse/vr_address_tools/commit/7901ee54e7405e00be7bc050016c45c4abc0d6f6))
 
 * build: update submodules ([`7f54b63`](https://github.com/alandtse/vr_address_tools/commit/7f54b63861c41ea40562f0680ab52fbbbf9f6306))
 
@@ -106,9 +172,9 @@ Lock aiocsv to 1.2.5 ([`8460fac`](https://github.com/alandtse/vr_address_tools/c
 
 * build: update submodules ([`5633128`](https://github.com/alandtse/vr_address_tools/commit/5633128054d62fae73e92df063596a3b66f1c12e))
 
-* build: bump deps ([`bcd64e2`](https://github.com/alandtse/vr_address_tools/commit/bcd64e22cf1b102e375758cb1bb7757bfb872a8d))
-
 * build: update submodules ([`a5b687f`](https://github.com/alandtse/vr_address_tools/commit/a5b687f1da769fda8a8899dc5d4b8eb032cbe8f7))
+
+* build: bump deps ([`bcd64e2`](https://github.com/alandtse/vr_address_tools/commit/bcd64e22cf1b102e375758cb1bb7757bfb872a8d))
 
 * build: update submodules ([`6cf8806`](https://github.com/alandtse/vr_address_tools/commit/6cf88061664b015a08985d7d2444da5930b30196))
 
@@ -152,10 +218,6 @@ Lock aiocsv to 1.2.5 ([`8460fac`](https://github.com/alandtse/vr_address_tools/c
 
 * build: update submodules ([`03f8303`](https://github.com/alandtse/vr_address_tools/commit/03f83030c649e5297cf2e8e49edc47f52920e91f))
 
-### Fix
-
-* fix: fix keyerrors in match ([`c9533f9`](https://github.com/alandtse/vr_address_tools/commit/c9533f9c4752d19b18894bbbccd0df2e61062ac4))
-
 ### Unknown
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`469f4fa`](https://github.com/alandtse/vr_address_tools/commit/469f4faa8c3acfe2829c7e1e95b5369159fd8911))
@@ -176,13 +238,6 @@ Lock aiocsv to 1.2.5 ([`8460fac`](https://github.com/alandtse/vr_address_tools/c
 
 * build: update submodules ([`fba3ebd`](https://github.com/alandtse/vr_address_tools/commit/fba3ebd537d086d77673d64a56db13f123ce6ed3))
 
-### Fix
-
-* fix: use suggested address through sse_vr.csv
-
-This should be a suggested address that mapped through indirect link
-id_sse -&gt; sse_vr. ([`2767f6d`](https://github.com/alandtse/vr_address_tools/commit/2767f6d8b1f0b2ca9d2fa02cec30a11f33087da0))
-
 ### Unknown
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`3fac1db`](https://github.com/alandtse/vr_address_tools/commit/3fac1dba2b9c65ecc6759871fafa6ae6abe0524d))
@@ -190,6 +245,8 @@ id_sse -&gt; sse_vr. ([`2767f6d`](https://github.com/alandtse/vr_address_tools/c
 ## v1.4.0 (2023-05-31)
 
 ### Build
+
+* build: bump deps ([`c97effd`](https://github.com/alandtse/vr_address_tools/commit/c97effd2bc20dd628706b2a578f96dda1ce3fed8))
 
 * build: update submodules ([`bbec161`](https://github.com/alandtse/vr_address_tools/commit/bbec16183ad16427f54d60c3715f97426cd0d107))
 
@@ -202,8 +259,6 @@ id_sse -&gt; sse_vr. ([`2767f6d`](https://github.com/alandtse/vr_address_tools/c
 * build: update submodules ([`041117d`](https://github.com/alandtse/vr_address_tools/commit/041117d23d50c82a2f1faeb2db4ec9c4ad868a40))
 
 * build: update submodules ([`e8ddd60`](https://github.com/alandtse/vr_address_tools/commit/e8ddd60996c2a7bef74abbbd8ba6c7d7f033e7a6))
-
-* build: bump deps ([`c97effd`](https://github.com/alandtse/vr_address_tools/commit/c97effd2bc20dd628706b2a578f96dda1ce3fed8))
 
 * build: update submodules ([`67bedf9`](https://github.com/alandtse/vr_address_tools/commit/67bedf9257ce5c23438a9529798fd08a94298e73))
 
@@ -219,13 +274,20 @@ id_sse -&gt; sse_vr. ([`2767f6d`](https://github.com/alandtse/vr_address_tools/c
 
 ### Feature
 
-* feat: add variantid detecion ([`dec0d56`](https://github.com/alandtse/vr_address_tools/commit/dec0d56da92778b4da40b4d912d3326ee58cdb8d))
-
 * feat: handle TOSSPONK pattern ([`39d305c`](https://github.com/alandtse/vr_address_tools/commit/39d305c2a2b1d1548d747ada2ad0556f1cbd9147))
+
+* feat: add variantid detecion ([`dec0d56`](https://github.com/alandtse/vr_address_tools/commit/dec0d56da92778b4da40b4d912d3326ee58cdb8d))
 
 ### Fix
 
 * fix: handle empty names from regex ([`a392e53`](https://github.com/alandtse/vr_address_tools/commit/a392e5332ee4c2b1e9722cdcca5d40b0a30406b4))
+
+* fix: fix keyerrors in match ([`c9533f9`](https://github.com/alandtse/vr_address_tools/commit/c9533f9c4752d19b18894bbbccd0df2e61062ac4))
+
+* fix: use suggested address through sse_vr.csv
+
+This should be a suggested address that mapped through indirect link
+id_sse -&gt; sse_vr. ([`2767f6d`](https://github.com/alandtse/vr_address_tools/commit/2767f6d8b1f0b2ca9d2fa02cec30a11f33087da0))
 
 ### Refactor
 
@@ -240,10 +302,6 @@ treating them the same as other files ([`ead7133`](https://github.com/alandtse/v
 
 ## v1.3.1 (2023-03-28)
 
-### Build
-
-* build: fix launch.json to run regardless of window ([`0ae6ee6`](https://github.com/alandtse/vr_address_tools/commit/0ae6ee65e6d772e9e5dae7b1976c4eef41791f2c))
-
 ### Fix
 
 * fix: fix bug where offsets not treated as hex ([`33e2d81`](https://github.com/alandtse/vr_address_tools/commit/33e2d81e412d858ceec5daa598deba08051bcdd8))
@@ -256,11 +314,21 @@ treating them the same as other files ([`ead7133`](https://github.com/alandtse/v
 
 ### Build
 
-* build: update deps ([`3c95dec`](https://github.com/alandtse/vr_address_tools/commit/3c95deceedc857ed8f3f8f8bd9c60eaa6e472c52))
+* build: fix launch.json to run regardless of window ([`0ae6ee6`](https://github.com/alandtse/vr_address_tools/commit/0ae6ee65e6d772e9e5dae7b1976c4eef41791f2c))
 
 * build: update submodules ([`8b1229a`](https://github.com/alandtse/vr_address_tools/commit/8b1229affc6cc4da4c95cd34e3f7db1dc3279673))
 
 * build: update submodules ([`0561436`](https://github.com/alandtse/vr_address_tools/commit/05614369a4df4f41f8ed90f8ebdf5cebb5786410))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`d03dd60`](https://github.com/alandtse/vr_address_tools/commit/d03dd607b0d09fbd83dc6792ba4ef96cc622ab9b))
+
+## v1.2.0 (2023-03-26)
+
+### Build
+
+* build: update deps ([`3c95dec`](https://github.com/alandtse/vr_address_tools/commit/3c95deceedc857ed8f3f8f8bd9c60eaa6e472c52))
 
 ### Feature
 
@@ -282,35 +350,9 @@ database. The database should be considered the source of truth. ([`85bd306`](ht
 
 ### Unknown
 
-* Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`d03dd60`](https://github.com/alandtse/vr_address_tools/commit/d03dd607b0d09fbd83dc6792ba4ef96cc622ab9b))
-
-## v1.2.0 (2023-03-26)
-
-### Build
-
-* build: add extra launch.json options ([`b78d6c2`](https://github.com/alandtse/vr_address_tools/commit/b78d6c2ee80ccaf9de2ddd522ffc5b48b4d638f7))
-
-* build: bump deps ([`d0865b5`](https://github.com/alandtse/vr_address_tools/commit/d0865b51a0a3f1ea0ee62f3a99526692889ce481))
-
-### Feature
-
-* feat: add extract Struct script
-
-This is intended to parse commonlib for Ghidra ([`f1486a7`](https://github.com/alandtse/vr_address_tools/commit/f1486a73149aacf44a8b2b346802ca4b7b69ce42))
-
-### Fix
-
-* fix: fix cppheaderparser #define bug ([`d71fb19`](https://github.com/alandtse/vr_address_tools/commit/d71fb19915fe70df7a6311a039764fc2c59dcccf))
-
-### Unknown
-
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`0c6bb42`](https://github.com/alandtse/vr_address_tools/commit/0c6bb42af9c2e913aeaf5e0a6c6fc60077c0b1fd))
 
 ## v1.1.1 (2023-03-23)
-
-### Fix
-
-* fix: handle parsing of blank files ([`c002b56`](https://github.com/alandtse/vr_address_tools/commit/c002b56b2ec10ec57c3ccd8133d92e98f15fe724))
 
 ### Unknown
 
@@ -325,6 +367,10 @@ This is intended to parse commonlib for Ghidra ([`f1486a7`](https://github.com/a
 * build: update submodules ([`3d732a2`](https://github.com/alandtse/vr_address_tools/commit/3d732a2bc0effa3faf4d1bb2b2f2f26f2a338d2c))
 
 * build: update submodules ([`2de97b0`](https://github.com/alandtse/vr_address_tools/commit/2de97b0f2a71aaa40f9772b1ac5e9179e03c3f3b))
+
+* build: add extra launch.json options ([`b78d6c2`](https://github.com/alandtse/vr_address_tools/commit/b78d6c2ee80ccaf9de2ddd522ffc5b48b4d638f7))
+
+* build: bump deps ([`d0865b5`](https://github.com/alandtse/vr_address_tools/commit/d0865b51a0a3f1ea0ee62f3a99526692889ce481))
 
 * build(deps): bump gitpython from 3.1.29 to 3.1.30
 
@@ -349,7 +395,13 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`2e83024`](https://g
 
 * feat: add support for maxsu _generic_foo ([`cd97230`](https://github.com/alandtse/vr_address_tools/commit/cd9723066f4d4a67d3e0bfcf92305feb34515667))
 
+* feat: add extract Struct script
+
+This is intended to parse commonlib for Ghidra ([`f1486a7`](https://github.com/alandtse/vr_address_tools/commit/f1486a73149aacf44a8b2b346802ca4b7b69ce42))
+
 ### Fix
+
+* fix: handle parsing of blank files ([`c002b56`](https://github.com/alandtse/vr_address_tools/commit/c002b56b2ec10ec57c3ccd8133d92e98f15fe724))
 
 * fix: show suggested matches for updateDatabase ([`3dfdb7f`](https://github.com/alandtse/vr_address_tools/commit/3dfdb7f03e9b324db7a27ed5dc4cb2390ca2ba87))
 
@@ -358,6 +410,8 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`2e83024`](https://g
 * fix: fix empty input1 strings for add_hex_strings ([`409f28c`](https://github.com/alandtse/vr_address_tools/commit/409f28cb9a69b01b258ef91d18ad8a59af4518b9))
 
 * fix: also capture templated decltype functions ([`591a5f4`](https://github.com/alandtse/vr_address_tools/commit/591a5f46836cf82ac29e22641a77425a22f9e7e4))
+
+* fix: fix cppheaderparser #define bug ([`d71fb19`](https://github.com/alandtse/vr_address_tools/commit/d71fb19915fe70df7a6311a039764fc2c59dcccf))
 
 ### Style
 
@@ -879,6 +933,8 @@ This reverts commit 57be98927699d6980d00e766cce2e6b54d0a1df6. ([`cd78d51`](https
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`b56d9d8`](https://github.com/alandtse/vr_address_tools/commit/b56d9d8d5bd26b397527262b4ad01dbc9d071504))
 
+* Update se_ae mapping based on latest commonlib ([`d1f842c`](https://github.com/alandtse/vr_address_tools/commit/d1f842ca96a85b4c710b7f51dbb2145a44ce0f82))
+
 * Update se_ae with commonlibng ([`b81ecef`](https://github.com/alandtse/vr_address_tools/commit/b81ecef4e8c70891e6c3f4776429022270d74cbf))
 
 * Add mypy ([`d407682`](https://github.com/alandtse/vr_address_tools/commit/d4076821afbf7dda95604c3f42ed54c052371ef3))
@@ -890,8 +946,6 @@ This reverts commit 57be98927699d6980d00e766cce2e6b54d0a1df6. ([`cd78d51`](https
 * Bump deps ([`65c6826`](https://github.com/alandtse/vr_address_tools/commit/65c682692d8a059301a628b9f4807dc0f1d5331f))
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`1d5516d`](https://github.com/alandtse/vr_address_tools/commit/1d5516de8e5c7ef102fc3b7a7caf30a6a01d7248))
-
-* Update se_ae mapping based on latest commonlib ([`d1f842c`](https://github.com/alandtse/vr_address_tools/commit/d1f842ca96a85b4c710b7f51dbb2145a44ce0f82))
 
 * Merge branch &#39;main&#39; of github.com:alandtse/vr_address_tools ([`76a6a3d`](https://github.com/alandtse/vr_address_tools/commit/76a6a3da7af8d63bbf138e1c1ea62585459d513b))
 
