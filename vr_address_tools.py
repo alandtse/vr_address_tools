@@ -834,6 +834,9 @@ def match_results(
     """
     global id_vr_status
     new_results = []
+    import csv
+    from io import StringIO
+
     for result in results:
         i = result["i"]
         directory = result["directory"]
@@ -902,7 +905,11 @@ def match_results(
                 description = f"{id_name.get(id)} {description}"
             elif match.get("name"):
                 description = f"{match.get('name')} {description}"
-            new_results.append(f"{id},{sse_addr},{suggested_vr},{status},{description}")
+            # Use csv.writer to quote fields as needed
+            output = StringIO()
+            writer = csv.writer(output, quoting=csv.QUOTE_MINIMAL)
+            writer.writerow([id, sse_addr, suggested_vr, status, description])
+            new_results.append(output.getvalue().strip())
         elif not database:
             new_results.append(
                 f"{directory}/{filename}:{i+1}\tID: {id}\tFLAT: {sse_addr}\t{conversion}\t{vr_addr}\t{warning}"
