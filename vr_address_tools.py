@@ -76,7 +76,7 @@ REGEX_PARSE_DICT = {
 }
 FUNCTION_REGEX = r"(?:class (?P<class_decl>\w+)[&\w\s;:<>{=[\]*]*?)?(?P<return_type>[\w<>:*&\s]+?)\s+(?:[\w]+::)*(?P<func_name>[\w]+)\s*\((?P<args>[^)]*),?\s*\)[\w\s]*{(?:[\w\s=]*decltype\(&(?:(?P<class>[\w:]+)::)?(?P=func_name)+(?:<.*>)?\))?[&\w\s;:<>{=*]*?REL(?:[\w:]*ID)\((?:(?P<id>\d*)|(?P<sseid>\d*),\s*(?P<aeid>\d*))\)\s*};"
 GENERIC_FOO_REGEX = r"(?P<return_type>[\w<>:*&]+)\s+(?:\w+::)?(?P<func_name>[\w]+)\s*\((?P<args>[^)]*)?\s*\)[\w\s]*{[^}]*?_generic_foo<(?:(?P<id>\d*)),\s+(?P=return_type)(?:,\s*)?(?:(?P<class>\w+)\*)?.*>\(.*\);"
-FUNCTION_FALLBACK_REGEX = r"(?P<return_type>[\w<>:*&\s]+?)\s+(?:(?P<class>[\w]+)::)*(?P<func_name>[\w~]+)\s*\((?P<args>[^)]*)\)\s*(?:const\s*)?{[^}]*?REL(?:::[\w]+)?\s*(?:<[^>]*>\s*\w+\s*)?{\s*(?:(?:RELOCATION_ID|REL::(?:Relocation)?ID)\((?P<sseid>\d+),\s*(?P<aeid>\d+)\)|REL::ID\((?P<id>\d+)\))\s*}"
+FUNCTION_FALLBACK_REGEX = r"(?P<return_type>[\w<>:*&\s]+?)\s+(?:(?P<class>[\w]+)::)*(?P<func_name>(?:operator\s*(?:[^\s()]+|\(\))|[\w~]+))\s*\((?P<args>[^)]*)\)\s*(?:const\s*)?{[^}]*?REL(?:::[\w]+)?\s*(?:<[^>]*>\s*\w+\s*)?{\s*(?:(?:RELOCATION_ID|REL::(?:Relocation)?ID)\((?P<sseid>\d+),\s*(?P<aeid>\d+)\)|REL::ID\((?P<id>\d+)\))\s*}"
 ARGS_REGEX = r"(?P<arg_pair>(?:const )?(?P<arg_type>[\w*&:_]+)\s+(?P<arg>[\w_]*)),?"
 FUNCTION_REGEX_PARSE_DICT = {
     "decltype": FUNCTION_REGEX,
