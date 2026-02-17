@@ -74,13 +74,15 @@ REGEX_PARSE_DICT = {
     REL_ID: OFFSET_RELID_PATTERN,
     REL_OFFSET: OFFSET_OFFSET_PATTERN,
 }
-FUNCTION_REGEX = r"(?:class (?P<class_decl>\w+)[&\w\s;:<>{=[\]*]*?)?(?P<return_type>[\w<>:*]+)\s+(?:\w+::)?(?P<func_name>[\w]+)\s*\((?P<args>[^)]*),?\s*\)[\w\s]*{(?:[\w\s=]*decltype\(&(?P<class>\w+)::(?P=func_name)+(?:<.*>)?\))?[&\w\s;:<>{=*]*REL(?:[\w:]*ID)\((?:(?P<id>\d*)|(?P<sseid>\d*),\s*(?P<aeid>\d*))\) };"
-GENERIC_FOO_REGEX = r"(?P<return_type>[\w<>:*&]+)\s+(?:\w+::)?(?P<func_name>[\w]+)\s*\((?P<args>[^)]*)?\s*\)[\w\s]*{[&\w\s;:<>{=*/+-.]*_generic_foo<(?:(?P<id>\d*)),\s+(?P=return_type)(?:,\s*)?(?:(?P<class>\w+)\*)?.*>\(.*\);"
+FUNCTION_REGEX = r"(?:class (?P<class_decl>\w+)[&\w\s;:<>{=[\]*]*?)?(?P<return_type>[\w<>:*&\s]+?)\s+(?:[\w]+::)*(?P<func_name>[\w]+)\s*\((?P<args>[^)]*),?\s*\)[\w\s]*{(?:[\w\s=]*decltype\(&(?:(?P<class>[\w:]+)::)?(?P=func_name)+(?:<.*>)?\))?[&\w\s;:<>{=*]*?REL(?:[\w:]*ID)\((?:(?P<id>\d*)|(?P<sseid>\d*),\s*(?P<aeid>\d*))\)\s*};"
+GENERIC_FOO_REGEX = r"(?P<return_type>[\w<>:*&]+)\s+(?:\w+::)?(?P<func_name>[\w]+)\s*\((?P<args>[^)]*)?\s*\)[\w\s]*{[^}]*?_generic_foo<(?:(?P<id>\d*)),\s+(?P=return_type)(?:,\s*)?(?:(?P<class>\w+)\*)?.*>\(.*\);"
+FUNCTION_FALLBACK_REGEX = r"(?P<return_type>[\w<>:*&\s]+?)\s+(?:(?P<class>[\w]+)::)*(?P<func_name>[\w~]+)\s*\((?P<args>[^)]*)\)\s*(?:const\s*)?{[^}]*?REL(?:::[\w]+)?\s*(?:<[^>]*>\s*\w+\s*)?{\s*(?:(?:RELOCATION_ID|REL::(?:Relocation)?ID)\((?P<sseid>\d+),\s*(?P<aeid>\d+)\)|REL::ID\((?P<id>\d+)\))\s*}"
 ARGS_REGEX = r"(?P<arg_pair>(?:const )?(?P<arg_type>[\w*&:_]+)\s+(?P<arg>[\w_]*)),?"
 FUNCTION_REGEX_PARSE_DICT = {
     "decltype": FUNCTION_REGEX,
     "tossponk": TOSSPONK_REL_ID_PATTTERN,
     "generic_foo": GENERIC_FOO_REGEX,
+    "fallback": FUNCTION_FALLBACK_REGEX,
 }
 REPLACEMENT = """
 #ifndef SKYRIMVR
@@ -382,21 +384,25 @@ async def load_database(
 async def scan_code(
     a_directory: str,
     a_exclude: List[str],
+    a_skip_files: List[str] = None,
 ) -> dict:
     """Scan code for uses of rel::id and also populate any known id_vr maps from offsets.
 
     Args:
         a_directory (str): Root directory to walk.
-        a_exclude (List[str]): List of file names to ignore.
+        a_exclude (List[str]): List of directory names to ignore.
+        a_skip_files (List[str], optional): List of filenames to skip. Defaults to None.
 
     Returns:
         results (Dict[str]): Dict of defined_rel_ids, defined_vr_offsets, results
     """
     global debug
+    a_skip_files = a_skip_files or []
     results = []
     defined_rel_ids = {}
     defined_vr_offsets = {}
     file_count = 0
+    skipped_count = 0
     tasks = []
     for dirpath, dirnames, filenames in os.walk(a_directory):
         rem = []
@@ -407,6 +413,11 @@ async def scan_code(
             dirnames.remove(todo)
 
         for filename in filenames:
+            if filename in a_skip_files:
+                skipped_count += 1
+                if debug:
+                    print(f"Skipping file: {dirpath}/{filename}")
+                continue
             if filename not in a_exclude and filename.endswith(ALL_TYPES):
                 file_count += 1
                 tasks.append(
@@ -420,6 +431,8 @@ async def scan_code(
                     )
                 )
     await asyncio.gather(*tasks)
+    if skipped_count:
+        print(f"Skipped {skipped_count:n} files matching skip list")
     print(
         f"Finished scanning {file_count:n} files. rel_ids: {len(defined_rel_ids)} offsets: {len(defined_vr_offsets)} results: {len(results)}"
     )
@@ -484,7 +497,7 @@ async def search_for_ids(
                                 ):
                                     # ids must be >= 0
                                     continue
-                                if match.get("sse") and match.get("ae"):
+                                if match.get("sse") and match.get("ae") and int(match.get("ae")) > 0:
                                     # update AE match database based on found items
                                     sse_id = int(match["sse"])
                                     ae_id = int(match.get("ae"))
@@ -550,12 +563,14 @@ async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filenam
     try:
         async with aiofiles.open(f"{dirpath}/{filename}", "r+") as f:
             data = mmap.mmap(f.fileno(), 0).read().decode("utf-8")
+            processed_data = await preProcessData(data)
             for type_key, regex in FUNCTION_REGEX_PARSE_DICT.items():
-                search = re.finditer(regex, await preProcessData(data), re.I)
+                search = re.finditer(regex, processed_data, re.I)
                 namespace = ""
                 for m in search:
                     result = m.groupdict()
-                    return_type = result.get("return_type", "")
+                    return_type = re.sub(r'\b(?:private|public|protected)\s*:\s*', '', result.get("return_type", ""))
+                    return_type = re.sub(r'#\w+\s+\w+\s*', '', return_type).strip()
                     funcName = result.get("func_name")
                     if result.get("class_decl") and namespace != result.get(
                         "class_decl"
@@ -582,17 +597,23 @@ async def find_known_names(defined_rel_ids, defined_vr_offsets, dirpath, filenam
                         name_string += f"{return_type} "
                     if fullName:
                         name_string += f"{fullName}"
-                    if args:
-                        name_string += f"({args})"
+                    if fullName:
+                        name_string += f"({args})" if args else "()"
                     if id:
-                        id_name[id] = name_string
-                        if debug:
-                            print(f"Found ID {id}: {id_name[id]}")
-                    if result.get("aeid"):
+                        if not id_name.get(id):
+                            id_name[id] = name_string
+                            if debug:
+                                print(f"Found ID {id}: {id_name[id]}")
+                        elif debug:
+                            print(f"Skipping ID {id}: already has name '{id_name[id]}', would have been '{name_string}'")
+                    if result.get("aeid") and int(result.get("aeid")) > 0:
                         aeid = int(result.get("aeid"))
-                        ae_name[aeid] = name_string
-                        if debug:
-                            print(f"Found AE_ID {aeid}: {ae_name[aeid]}")
+                        if not ae_name.get(aeid):
+                            ae_name[aeid] = name_string
+                            if debug:
+                                print(f"Found AE_ID {aeid}: {ae_name[aeid]}")
+                        elif debug:
+                            print(f"Skipping AE_ID {aeid}: already has name '{ae_name[aeid]}'")
     except (UnicodeDecodeError, ValueError, PermissionError) as ex:
         print(f"Unable to read {dirpath}/{filename}: ", ex)
 
@@ -897,14 +918,15 @@ def match_results(
             conversion = f"UNKNOWN SSE_{sse_addr}{f'+{offset}={add_hex_strings(sse_addr, offset)}' if offset else ''}"
         if database and updateDatabase:
             status = 1 if status == 0 else status
-            if ae_name.get(sse_ae.get(id)):
-                description = ae_name.get(sse_ae.get(id))
-            else:
-                description = f"{directory[1:] if directory.startswith('/') or directory.startswith(chr(92)) else directory}/{filename}:{i+1}"
+            fallback = f"{directory[1:] if directory.startswith('/') or directory.startswith(chr(92)) else directory}/{filename}:{i+1}"
             if id_name.get(id):
-                description = f"{id_name.get(id)} {description}"
+                description = id_name.get(id)
+            elif ae_name.get(sse_ae.get(id)):
+                description = ae_name.get(sse_ae.get(id))
             elif match.get("name"):
-                description = f"{match.get('name')} {description}"
+                description = match.get("name")
+            else:
+                description = fallback
             # Use csv.writer to quote fields as needed
             output = StringIO()
             writer = csv.writer(output, quoting=csv.QUOTE_MINIMAL)
@@ -1135,6 +1157,13 @@ async def main():
         action="store_true",
         help="Analyze Fallout4 instead of Skyrim.",
     )
+    parser.add_argument(
+        "-s",
+        "--skip",
+        action="append",
+        default=[],
+        help="Filenames to skip during scanning. Can be specified multiple times (e.g., -s Offsets_VTABLE.h -s Offsets_RTTI.h).",
+    )
     subparsers = parser.add_subparsers(dest="subparser")
 
     parser_analyze = subparsers.add_parser(
@@ -1204,6 +1233,7 @@ async def main():
     if debug:
         print(args)
     exclude = ["build", "buildvr", "extern", "external"]
+    skip_files = args.get("skip", [])
     scan_results = {}
     cpp = preParser()  # init preprocessor
     # Load files from location of python script
@@ -1228,6 +1258,7 @@ async def main():
         scan_results = await scan_code(
             root,
             exclude,
+            skip_files,
         )
     analyze = args.get("subparser") == "analyze"
     replace = args.get("subparser") == "replace"
