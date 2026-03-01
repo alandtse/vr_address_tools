@@ -1232,7 +1232,7 @@ async def main():
     fallout = args.get("fallout", False)
     if debug:
         print(args)
-    exclude = ["build", "buildvr", "extern", "external"]
+    exclude = ["build", "buildvr", "extern", "external", "lib"]
     skip_files = args.get("skip", [])
     scan_results = {}
     cpp = preParser()  # init preprocessor
