@@ -280,9 +280,10 @@ async def load_database(
                 loaded += 1
     except FileNotFoundError:
         print(f"{ida_compare} not found")
-    try:
-        with open(os.path.join(path, pdb_json), mode="r") as infile:
-            pdb = orjson.loads(infile.read())
+    if pdb_json:
+        try:
+            with open(os.path.join(path, pdb_json), mode="r") as infile:
+                pdb = orjson.loads(infile.read())
             for record in pdb["PublicsStream"]["Records"]:
                 name = record["PublicSym32"]["Name"]
                 offset = record["PublicSym32"]["Offset"]
@@ -294,8 +295,8 @@ async def load_database(
                     offset_name[add_hex_strings(hex(offset), found_base)] = name
             if debug:
                 print(f"{pdb_json} loaded with {len(offset_name)} entries")
-    except FileNotFoundError:
-        print(f"{pdb_json} not found")
+        except FileNotFoundError:
+            print(f"{pdb_json} not found")
     if skyrim:
         try:
             async with aiofiles.open(os.path.join(path, se_ae), mode="r") as infile:
