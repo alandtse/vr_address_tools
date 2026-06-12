@@ -215,7 +215,9 @@ async def load_database(
     database = "database.csv" if skyrim else "fo4_database.csv"
     path = os.path.join(path, database_path)
     try:
-        async with aiofiles.open(os.path.join(path, database), mode="r") as infile:
+        async with aiofiles.open(
+            os.path.join(path, database), mode="r", encoding="utf-8-sig"
+        ) as infile:
             reader = aiocsv.AsyncDictReader(infile, restval="")
             async for row in reader:
                 id = int(row["id"])
@@ -233,7 +235,9 @@ async def load_database(
         print(f"database.csv not found")
 
     try:
-        async with aiofiles.open(os.path.join(path, addresslib), mode="r") as infile:
+        async with aiofiles.open(
+            os.path.join(path, addresslib), mode="r", encoding="utf-8-sig"
+        ) as infile:
             reader = aiocsv.AsyncDictReader(infile)
             async for row in reader:
                 id = int(row["id"])
@@ -256,7 +260,9 @@ async def load_database(
         print(f"{addresslib} not found")
 
     try:
-        async with aiofiles.open(os.path.join(path, offsets), mode="r") as infile:
+        async with aiofiles.open(
+            os.path.join(path, offsets), mode="r", encoding="utf-8-sig"
+        ) as infile:
             reader = aiocsv.AsyncDictReader(infile)
             async for row in reader:
                 id = int(row["id"])
@@ -273,7 +279,9 @@ async def load_database(
     except FileNotFoundError:
         print(f"{offsets} not found")
     try:
-        async with aiofiles.open(os.path.join(path, ida_compare), mode="r") as infile:
+        async with aiofiles.open(
+            os.path.join(path, ida_compare), mode="r", encoding="utf-8-sig"
+        ) as infile:
             reader = aiocsv.AsyncDictReader(infile)
             async for row in reader:
                 if skyrim:
@@ -305,7 +313,9 @@ async def load_database(
             print(f"{pdb_json} not found")
     if skyrim:
         try:
-            async with aiofiles.open(os.path.join(path, se_ae), mode="r") as infile:
+            async with aiofiles.open(
+                os.path.join(path, se_ae), mode="r", encoding="utf-8-sig"
+            ) as infile:
                 reader = aiocsv.AsyncDictReader(infile)
                 # sseid,aeid,confidence,name
                 async for row in reader:
@@ -319,7 +329,9 @@ async def load_database(
             print(f"{se_ae} not found")
 
         try:
-            async with aiofiles.open(os.path.join(path, ae_names), mode="r") as infile:
+            async with aiofiles.open(
+                os.path.join(path, ae_names), mode="r", encoding="utf-8-sig"
+            ) as infile:
                 reader = aiocsv.AsyncReader(infile, delimiter=" ")
                 # 11 MonitorAPO::Func9_*
                 async for row in reader:
@@ -337,7 +349,7 @@ async def load_database(
 
         try:
             async with aiofiles.open(
-                os.path.join(path, se_ae_offsets), mode="r"
+                os.path.join(path, se_ae_offsets), mode="r", encoding="utf-8-sig"
             ) as infile:
                 reader = aiocsv.AsyncDictReader(infile, delimiter=",")
                 # sseid,sse_addr,ae_addr,aeid,comments
